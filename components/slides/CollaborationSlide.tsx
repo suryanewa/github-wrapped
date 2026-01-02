@@ -108,7 +108,7 @@ export function CollaborationSlide({ data, isActive }: SlideProps) {
             transition={{ delay: 0.8 }}
             className="pt-6"
           >
-            <ReviewComment author="github-wrapped-bot" line={11}>
+            <ReviewComment author="github-wrapped-bot">
               {message.comment}
             </ReviewComment>
           </motion.div>

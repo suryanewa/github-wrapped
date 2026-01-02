@@ -114,7 +114,7 @@ export function ProfileSlide({ data, isActive }: SlideProps) {
             transition={{ delay: 0.7 }}
             className="pt-6"
           >
-            <ReviewComment author="github-wrapped-bot" line={3}>
+            <ReviewComment author="github-wrapped-bot">
               {profile.followers > 100
                 ? `With ${profile.followers.toLocaleString()} followers watching, your work resonates beyond your repos.`
                 : profile.followers > 50
