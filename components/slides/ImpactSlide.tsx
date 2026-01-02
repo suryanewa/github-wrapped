@@ -1,109 +1,232 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FileHeader, DiffLine, ReviewComment } from '@/components/primitives';
+import { FileHeader, ReviewComment, StatusBadge } from '@/components/primitives';
 import { SlideProps } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
-export function ImpactSlide({ data }: SlideProps) {
+export function ImpactSlide({ data, isActive }: SlideProps) {
   const { impact, profile } = data;
 
   const hasImpact = impact.starsEarned > 0 || impact.forksEarned > 0;
-
-  if (!hasImpact) {
-    return (
-      <div className="w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <FileHeader filename="community-reach.md" type="file" />
-          <div className="bg-diff-surface border border-diff-neutral/30 border-t-0 rounded-b-lg p-6 md:p-8">
-            <h3 className="font-serif text-2xl text-foreground mb-6">
-              Building Foundations
-            </h3>
-            <div className="space-y-4">
-              <DiffLine type="addition">
-                Every project starts somewhere
-              </DiffLine>
-              <DiffLine type="addition">
-                {profile.followers} developers following your journey
-              </DiffLine>
-            </div>
-            <ReviewComment>
-              Impact isn't always measured in stars. Building in public, learning openly, and contributing consistently—these are the foundations of lasting influence.
-            </ReviewComment>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
+  const totalImpact = impact.starsEarned + impact.forksEarned + profile.followers;
 
   return (
-    <div className="w-full">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <FileHeader filename="community-reach.diff" type="diff" />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isActive ? 1 : 0 }}
+      className="w-full"
+    >
+      <div className="max-w-4xl">
+        <FileHeader
+          filename="community-impact.metrics"
+          type="file"
+          status={hasImpact ? "added" : "modified"}
+        />
 
-        <div className="bg-diff-surface border border-diff-neutral/30 border-t-0 rounded-b-lg p-6 md:p-8">
-          <h3 className="font-serif text-2xl text-foreground mb-6">
-            Community Impact
-          </h3>
-
-          {/* Diff header */}
-          <div className="mb-4 font-mono text-sm text-diff-comment">
-            @@ Community Reach @@
+        <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg">
+          {/* Header */}
+          <div className="px-6 py-3 border-b border-diff-border flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <StatusBadge status="neutral" label="METRICS" icon={false} />
+              <span className="text-xs text-diff-neutral font-mono">
+                Community reach analysis
+              </span>
+            </div>
+            <div className="text-xs text-diff-neutral font-mono">
+              {totalImpact.toLocaleString()} total reach
+            </div>
           </div>
 
-          {/* Stars and Forks */}
-          <div className="space-y-2 mb-8">
-            <DiffLine type="addition">
-              <span className="font-bold text-xl">{impact.starsEarned.toLocaleString()}</span> stars earned across your work
-            </DiffLine>
-            <DiffLine type="addition">
-              <span className="font-bold text-xl">{impact.forksEarned.toLocaleString()}</span> forks by other developers
-            </DiffLine>
-            <DiffLine type="addition">
-              <span className="font-bold text-xl">{profile.followers.toLocaleString()}</span> followers tracking your journey
-            </DiffLine>
-          </div>
+          {hasImpact ? (
+            <>
+              {/* Metric Cards */}
+              <div className="px-6 py-6 space-y-4">
+                {/* Stars */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center">
+                        <span className="text-xl">⭐</span>
+                      </div>
+                      <div>
+                        <div className="text-xs text-diff-neutral font-mono mb-1">Stars Earned</div>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: isActive ? 1 : 0 }}
+                          transition={{ delay: 0.2 }}
+                          className="text-2xl text-diff-highlight font-mono font-bold"
+                        >
+                          {impact.starsEarned.toLocaleString()}
+                        </motion.div>
+                      </div>
+                    </div>
+                    <StatusBadge
+                      status={impact.starsEarned > 100 ? 'success' :
+                             impact.starsEarned > 10 ? 'warning' : 'neutral'}
+                      label={impact.starsEarned > 100 ? 'High' :
+                            impact.starsEarned > 10 ? 'Growing' : 'Early'}
+                      icon={false}
+                    />
+                  </div>
 
-          {/* Top Project */}
-          {impact.topStarredRepo && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-diff-bg rounded-lg p-5 border border-diff-neutral/20"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-2xl">⭐</span>
-                <span className="font-mono text-sm text-diff-neutral">Most Popular Project</span>
+                  {/* Progress bar */}
+                  <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: isActive ? `${Math.min((impact.starsEarned / 1000) * 100, 100)}%` : 0 }}
+                      transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
+                      className="h-full bg-diff-highlight"
+                    />
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono mt-2">
+                    Developers who bookmarked your work
+                  </div>
+                </motion.div>
+
+                {/* Forks */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }}
+                  transition={{ delay: 0.15 }}
+                  className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-diff-addition/20 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-diff-addition" fill="currentColor" viewBox="0 0 16 16">
+                          <path fillRule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-xs text-diff-neutral font-mono mb-1">Forks Created</div>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: isActive ? 1 : 0 }}
+                          transition={{ delay: 0.25 }}
+                          className="text-2xl text-diff-addition font-mono font-bold"
+                        >
+                          {impact.forksEarned.toLocaleString()}
+                        </motion.div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: isActive ? `${Math.min((impact.forksEarned / 200) * 100, 100)}%` : 0 }}
+                      transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
+                      className="h-full bg-diff-addition"
+                    />
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono mt-2">
+                    Developers building on your code
+                  </div>
+                </motion.div>
+
+                {/* Followers */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-diff-comment/20 flex items-center justify-center">
+                        <svg className="w-5 h-5 text-diff-comment" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M2 5.5a3.5 3.5 0 115.898 2.549 5.507 5.507 0 013.034 4.084.75.75 0 11-1.482.235 4.001 4.001 0 00-7.9 0 .75.75 0 01-1.482-.236A5.507 5.507 0 013.102 8.05 3.49 3.49 0 012 5.5zM11 4a.75.75 0 100 1.5 1.5 1.5 0 01.666 2.844.75.75 0 00-.416.672v.352a.75.75 0 00.574.73c1.2.289 2.162 1.2 2.522 2.372a.75.75 0 101.482-.236 5.507 5.507 0 00-3.034-4.084A3.002 3.002 0 0011 4z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-xs text-diff-neutral font-mono mb-1">Followers</div>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: isActive ? 1 : 0 }}
+                          transition={{ delay: 0.3 }}
+                          className="text-2xl text-diff-comment font-mono font-bold"
+                        >
+                          {profile.followers.toLocaleString()}
+                        </motion.div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: isActive ? `${Math.min((profile.followers / 500) * 100, 100)}%` : 0 }}
+                      transition={{ delay: 0.35, duration: 0.6, ease: 'easeOut' }}
+                      className="h-full bg-diff-comment"
+                    />
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono mt-2">
+                    Developers following your journey
+                  </div>
+                </motion.div>
+
+                {/* Top Project */}
+                {impact.topStarredRepo && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xl">🏆</span>
+                      <span className="text-xs text-diff-neutral font-mono">Most Popular</span>
+                    </div>
+                    <div className="font-mono text-lg text-foreground font-bold">
+                      {impact.topStarredRepo}
+                    </div>
+                  </motion.div>
+                )}
               </div>
-              <div className="font-mono text-xl text-diff-addition font-bold">
-                {impact.topStarredRepo}
+            </>
+          ) : (
+            <div className="px-6 py-8">
+              <div className="text-center space-y-4">
+                <div className="text-4xl">🌱</div>
+                <h3 className="font-mono text-xl text-foreground">
+                  Building Foundations
+                </h3>
+                <p className="text-diff-neutral font-mono text-sm max-w-md mx-auto">
+                  {profile.followers} developers following your journey. Every project starts somewhere.
+                </p>
               </div>
-              <div className="text-sm text-diff-neutral mt-2">
-                Your work resonates with the community
-              </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Review Comment */}
-          <ReviewComment>
-            {impact.starsEarned > 1000
-              ? 'Exceptional reach. Your work impacts thousands of developers worldwide.'
-              : impact.starsEarned > 100
-              ? 'Significant impact. Developers are finding value in your contributions.'
-              : impact.starsEarned > 10
-              ? 'Growing influence. Your work is being discovered and appreciated.'
-              : 'Early traction. Every star represents someone who found your work valuable.'}
-          </ReviewComment>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+            transition={{ delay: hasImpact ? 0.6 : 0.3 }}
+            className="px-6 pb-6"
+          >
+            <ReviewComment author="github-wrapped-bot" timestamp="just now">
+              {!hasImpact
+                ? `Impact isn't always measured in stars. With ${profile.followers} followers, you're building in public and establishing your presence. Consistency compounds over time.`
+                : impact.starsEarned > 1000
+                ? `${impact.starsEarned.toLocaleString()} stars represents exceptional community reach. Your work influences thousands of developers worldwide. ${impact.forksEarned} forks show others building on your foundation.`
+                : impact.starsEarned > 100
+                ? `Significant traction with ${impact.starsEarned} stars and ${impact.forksEarned} forks. Developers are discovering value in your work. ${profile.followers} followers track your ongoing contributions.`
+                : impact.starsEarned > 10
+                ? `Growing influence: ${impact.starsEarned} stars earned, ${impact.forksEarned} forks created. Early adopters recognize quality. Continue building and sharing.`
+                : `Early momentum with ${impact.starsEarned} stars. Every star represents someone who found your work valuable. ${profile.followers} followers see potential in your trajectory.`}
+            </ReviewComment>
+          </motion.div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }
