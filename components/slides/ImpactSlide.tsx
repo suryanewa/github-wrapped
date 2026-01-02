@@ -69,8 +69,13 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
                             scale: isActive ? 1 : 0.8,
                             rotate: isActive ? 0 : -15
                           }}
+                          whileHover={{
+                            scale: 1.2,
+                            rotate: [0, -10, 10, 0],
+                            transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+                          }}
                           transition={{ delay: 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                          className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center border border-diff-highlight/30"
+                          className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center border border-diff-highlight/30 cursor-pointer"
                         >
                           <Star className="w-5 h-5 text-diff-highlight" fill="currentColor" strokeWidth={0} />
                         </motion.div>
@@ -243,7 +248,13 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
                             scale: isActive ? [0.8, 1.1, 1] : 0.8,
                             y: isActive ? 0 : 5
                           }}
+                          whileHover={{
+                            scale: [1, 1.2, 1.1],
+                            y: [0, -3, 0],
+                            transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+                          }}
                           transition={{ delay: 0.39, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                          className="cursor-pointer"
                         >
                           <Trophy className="w-5 h-5 text-diff-highlight" fill="currentColor" strokeWidth={0.5} />
                         </motion.div>
@@ -266,8 +277,13 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
                     scale: isActive ? 1 : 0.8,
                     opacity: isActive ? 1 : 0
                   }}
+                  whileHover={{
+                    scale: 1.15,
+                    rotate: [0, -5, 5, -5, 5, 0],
+                    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+                  }}
                   transition={{ delay: 0.1, duration: 0.5 }}
-                  className="flex justify-center"
+                  className="flex justify-center cursor-pointer"
                 >
                   <Sprout className="w-12 h-12 text-diff-addition" strokeWidth={1.5} />
                 </motion.div>

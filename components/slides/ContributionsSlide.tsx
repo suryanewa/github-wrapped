@@ -118,8 +118,13 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
                         opacity: isActive ? 1 : 0,
                         rotate: isActive ? 0 : -10
                       }}
+                      whileHover={{
+                        scale: 1.15,
+                        rotate: [0, -5, 5, 0],
+                        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+                      }}
                       transition={{ delay: 0.7 + index * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      className="mb-2 filter drop-shadow-lg"
+                      className="mb-2 filter drop-shadow-lg cursor-pointer"
                     >
                       <stat.Icon className="w-6 h-6 text-diff-addition" strokeWidth={2} />
                     </motion.div>

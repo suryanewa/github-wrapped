@@ -88,7 +88,13 @@ export function SummarySlide({ data, isActive }: SlideProps) {
                   scale: isActive ? 1 : 0.8,
                   rotate: isActive ? 0 : -10
                 }}
+                whileHover={{
+                  scale: 1.2,
+                  rotate: [0, -8, 8, -8, 8, 0],
+                  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+                }}
                 transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="cursor-pointer"
               >
                 <Theater className="w-6 h-6 text-diff-comment" strokeWidth={2} />
               </motion.div>
@@ -137,8 +143,17 @@ export function SummarySlide({ data, isActive }: SlideProps) {
             {impact.starsEarned > 0 && (
               <div className="flex items-center justify-between">
                 <span className="text-diff-neutral font-mono text-sm">Stars Earned</span>
-                <span className="text-diff-highlight font-mono font-bold text-lg flex items-center gap-2">
-                  <Star className="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                <span className="text-diff-highlight font-mono font-bold text-lg flex items-center gap-2 group/star">
+                  <motion.div
+                    whileHover={{
+                      scale: 1.3,
+                      rotate: [0, -15, 15, 0],
+                      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Star className="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  </motion.div>
                   {impact.starsEarned.toLocaleString()}
                 </span>
               </div>
