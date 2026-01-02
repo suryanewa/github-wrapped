@@ -1,6 +1,7 @@
 import { Slide } from './types';
 import {
   BootSlide,
+  ProfileSlide,
   ContributionsSlide,
   ArchetypeSlide,
   RepositoriesSlide,
@@ -15,6 +16,11 @@ export const SLIDE_DECK: Slide[] = [
   {
     id: 'boot',
     component: BootSlide,
+  },
+  {
+    id: 'profile',
+    component: ProfileSlide,
+    file: `${new Date().getFullYear()}-year-in-review.pr`,
   },
   {
     id: 'contributions',

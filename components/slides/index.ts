@@ -1,4 +1,5 @@
 export { BootSlide } from './BootSlide';
+export { ProfileSlide } from './ProfileSlide';
 export { ContributionsSlide } from './ContributionsSlide';
 export { ArchetypeSlide } from './ArchetypeSlide';
 export { RepositoriesSlide } from './RepositoriesSlide';
