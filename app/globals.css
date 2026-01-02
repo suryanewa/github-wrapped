@@ -8,6 +8,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,6 +38,13 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-diff-bg: var(--diff-bg);
+  --color-diff-surface: var(--diff-surface);
+  --color-diff-addition: var(--diff-addition);
+  --color-diff-deletion: var(--diff-deletion);
+  --color-diff-neutral: var(--diff-neutral);
+  --color-diff-comment: var(--diff-comment);
+  --color-diff-highlight: var(--diff-highlight);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -79,6 +87,15 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Cinematic Diff Theme */
+  --diff-bg: #1a1a1a;
+  --diff-surface: #242424;
+  --diff-addition: #22c55e;
+  --diff-deletion: #ef4444;
+  --diff-neutral: #71717a;
+  --diff-comment: #3b82f6;
+  --diff-highlight: #fbbf24;
 }
 
 .dark {
@@ -113,6 +130,15 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Cinematic Diff Theme (same as light) */
+  --diff-bg: #1a1a1a;
+  --diff-surface: #242424;
+  --diff-addition: #22c55e;
+  --diff-deletion: #ef4444;
+  --diff-neutral: #71717a;
+  --diff-comment: #3b82f6;
+  --diff-highlight: #fbbf24;
 }
 
 @layer base {
@@ -120,6 +146,44 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-diff-bg text-foreground antialiased;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.015) 0px,
+        transparent 1px,
+        transparent 2px,
+        rgba(255, 255, 255, 0.015) 3px
+      );
+  }
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .text-diff-addition {
+    color: var(--diff-addition);
+  }
+
+  .text-diff-deletion {
+    color: var(--diff-deletion);
+  }
+
+  .text-diff-neutral {
+    color: var(--diff-neutral);
+  }
+
+  .text-diff-comment {
+    color: var(--diff-comment);
+  }
+
+  .text-diff-highlight {
+    color: var(--diff-highlight);
+  }
+
+  .bg-diff-surface {
+    background-color: var(--diff-surface);
   }
 }
