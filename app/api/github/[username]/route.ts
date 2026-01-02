@@ -23,7 +23,7 @@ export async function GET(
   { params }: { params: Promise<{ username: string }> }
 ) {
   const { username } = await params;
-  const year = new Date().getFullYear();
+  const year = 2025;
 
   try {
     // Fetch all data in parallel

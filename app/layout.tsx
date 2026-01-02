@@ -10,8 +10,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GitHub Wrapped - Your Year in Code",
-  description: "Review your GitHub year the way developers review code: as a diff.",
+  title: "GitHub Wrapped 2025 - Your Year in Code",
+  description: "Review your 2025 GitHub year the way developers review code: as a diff.",
 };
 
 export default function RootLayout({

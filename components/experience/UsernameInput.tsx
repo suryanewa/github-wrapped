@@ -53,10 +53,10 @@ export function UsernameInput({ onSubmit, isLoading = false }: UsernameInputProp
         <div className="bg-diff-surface rounded-lg border border-diff-neutral/30 p-8 md:p-12">
           <div className="mb-8">
             <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-              GitHub Wrapped
+              GitHub Wrapped 2025
             </h1>
             <p className="text-diff-neutral text-lg">
-              Review your year in code, the way developers review code: as a diff.
+              Review your 2025 in code, the way developers review code: as a diff.
             </p>
           </div>
 

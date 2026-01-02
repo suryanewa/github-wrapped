@@ -20,46 +20,46 @@ export const SLIDE_DECK: Slide[] = [
   {
     id: 'profile',
     component: ProfileSlide,
-    file: `${new Date().getFullYear()}-year-in-review.pr`,
+    file: '2025-year-in-review.pr',
   },
   {
     id: 'contributions',
     component: ContributionsSlide,
-    file: 'year-in-review.md',
+    file: 'contributions-summary.md',
   },
   {
     id: 'archetype',
     component: ArchetypeSlide,
-    file: 'developer-identity.ts',
+    file: 'developer-archetype.ts',
   },
   {
     id: 'repositories',
     component: RepositoriesSlide,
-    file: 'top-projects.diff',
+    file: 'top-repositories.md',
   },
   {
     id: 'languages',
     component: LanguagesSlide,
-    file: 'tech-stack.md',
+    file: 'language-distribution.json',
   },
   {
     id: 'rhythm',
     component: RhythmSlide,
-    file: 'coding-patterns.log',
+    file: 'activity-rhythm.log',
   },
   {
     id: 'collaboration',
     component: CollaborationSlide,
-    file: 'collaboration-signal.md',
+    file: 'collaboration-network.yml',
   },
   {
     id: 'impact',
     component: ImpactSlide,
-    file: 'community-reach.diff',
+    file: 'impact-metrics.md',
   },
   {
     id: 'summary',
     component: SummarySlide,
-    file: 'pull-request-summary.md',
+    file: 'year-review-summary.md',
   },
 ];
