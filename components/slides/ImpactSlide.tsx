@@ -40,153 +40,200 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
 
           {hasImpact ? (
             <>
-              {/* Metric Cards */}
-              <div className="px-6 py-6 space-y-4">
+              {/* Metric Cards - Glass Morphism */}
+              <div className="px-6 py-8 space-y-3">
                 {/* Stars */}
                 <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }}
-                  transition={{ delay: 0.1 }}
-                  className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.1,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center">
-                        <span className="text-xl">⭐</span>
-                      </div>
-                      <div>
-                        <div className="text-xs text-diff-neutral font-mono mb-1">Stars Earned</div>
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: isActive ? 1 : 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="text-2xl text-diff-highlight font-mono font-bold"
-                        >
-                          {impact.starsEarned.toLocaleString()}
-                        </motion.div>
-                      </div>
-                    </div>
-                    <StatusBadge
-                      status={impact.starsEarned > 100 ? 'success' :
-                             impact.starsEarned > 10 ? 'warning' : 'neutral'}
-                      label={impact.starsEarned > 100 ? 'High' :
-                            impact.starsEarned > 10 ? 'Growing' : 'Early'}
-                      icon={false}
-                    />
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-diff-highlight/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                  {/* Progress bar */}
-                  <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: isActive ? `${Math.min((impact.starsEarned / 1000) * 100, 100)}%` : 0 }}
-                      transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
-                      className="h-full bg-diff-highlight"
-                    />
-                  </div>
-                  <div className="text-xs text-diff-neutral font-mono mt-2">
-                    Developers who bookmarked your work
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center border border-diff-highlight/30">
+                          <span className="text-xl">⭐</span>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Stars Earned</div>
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: isActive ? 1 : 0 }}
+                            transition={{ delay: 0.15 }}
+                            className="text-2xl text-diff-highlight font-mono font-bold text-display"
+                          >
+                            {impact.starsEarned.toLocaleString()}
+                          </motion.div>
+                        </div>
+                      </div>
+                      <StatusBadge
+                        status={impact.starsEarned > 100 ? 'success' :
+                               impact.starsEarned > 10 ? 'warning' : 'neutral'}
+                        label={impact.starsEarned > 100 ? 'High' :
+                              impact.starsEarned > 10 ? 'Growing' : 'Early'}
+                        icon={false}
+                      />
+                    </div>
+
+                    <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: isActive ? `${Math.min((impact.starsEarned / 1000) * 100, 100)}%` : 0 }}
+                        transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="h-full bg-diff-highlight"
+                        style={{ boxShadow: '0 0 6px var(--diff-highlight)' }}
+                      />
+                    </div>
+                    <div className="text-xs text-diff-neutral/80 font-mono mt-2">
+                      Developers who bookmarked your work
+                    </div>
                   </div>
                 </motion.div>
 
                 {/* Forks */}
                 <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }}
-                  transition={{ delay: 0.15 }}
-                  className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.18,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-diff-addition/20 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-diff-addition" fill="currentColor" viewBox="0 0 16 16">
-                          <path fillRule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-xs text-diff-neutral font-mono mb-1">Forks Created</div>
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: isActive ? 1 : 0 }}
-                          transition={{ delay: 0.25 }}
-                          className="text-2xl text-diff-addition font-mono font-bold"
-                        >
-                          {impact.forksEarned.toLocaleString()}
-                        </motion.div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-diff-addition/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-diff-addition/20 flex items-center justify-center border border-diff-addition/30">
+                          <svg className="w-5 h-5 text-diff-addition" fill="currentColor" viewBox="0 0 16 16">
+                            <path fillRule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Forks Created</div>
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: isActive ? 1 : 0 }}
+                            transition={{ delay: 0.23 }}
+                            className="text-2xl text-diff-addition font-mono font-bold text-display group-hover:text-glow-green transition-all duration-300"
+                          >
+                            {impact.forksEarned.toLocaleString()}
+                          </motion.div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Progress bar */}
-                  <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: isActive ? `${Math.min((impact.forksEarned / 200) * 100, 100)}%` : 0 }}
-                      transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
-                      className="h-full bg-diff-addition"
-                    />
-                  </div>
-                  <div className="text-xs text-diff-neutral font-mono mt-2">
-                    Developers building on your code
+                    <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: isActive ? `${Math.min((impact.forksEarned / 200) * 100, 100)}%` : 0 }}
+                        transition={{ delay: 0.28, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="h-full bg-diff-addition"
+                        style={{ boxShadow: '0 0 6px var(--diff-addition)' }}
+                      />
+                    </div>
+                    <div className="text-xs text-diff-neutral/80 font-mono mt-2">
+                      Developers building on your code
+                    </div>
                   </div>
                 </motion.div>
 
                 {/* Followers */}
                 <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -20 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.26,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-diff-comment/20 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-diff-comment" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M2 5.5a3.5 3.5 0 115.898 2.549 5.507 5.507 0 013.034 4.084.75.75 0 11-1.482.235 4.001 4.001 0 00-7.9 0 .75.75 0 01-1.482-.236A5.507 5.507 0 013.102 8.05 3.49 3.49 0 012 5.5zM11 4a.75.75 0 100 1.5 1.5 1.5 0 01.666 2.844.75.75 0 00-.416.672v.352a.75.75 0 00.574.73c1.2.289 2.162 1.2 2.522 2.372a.75.75 0 101.482-.236 5.507 5.507 0 00-3.034-4.084A3.002 3.002 0 0011 4z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-xs text-diff-neutral font-mono mb-1">Followers</div>
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: isActive ? 1 : 0 }}
-                          transition={{ delay: 0.3 }}
-                          className="text-2xl text-diff-comment font-mono font-bold"
-                        >
-                          {profile.followers.toLocaleString()}
-                        </motion.div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-diff-comment/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-diff-comment/20 flex items-center justify-center border border-diff-comment/30">
+                          <svg className="w-5 h-5 text-diff-comment" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M2 5.5a3.5 3.5 0 115.898 2.549 5.507 5.507 0 013.034 4.084.75.75 0 11-1.482.235 4.001 4.001 0 00-7.9 0 .75.75 0 01-1.482-.236A5.507 5.507 0 013.102 8.05 3.49 3.49 0 012 5.5zM11 4a.75.75 0 100 1.5 1.5 1.5 0 01.666 2.844.75.75 0 00-.416.672v.352a.75.75 0 00.574.73c1.2.289 2.162 1.2 2.522 2.372a.75.75 0 101.482-.236 5.507 5.507 0 00-3.034-4.084A3.002 3.002 0 0011 4z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Followers</div>
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: isActive ? 1 : 0 }}
+                            transition={{ delay: 0.31 }}
+                            className="text-2xl text-diff-comment font-mono font-bold text-display"
+                          >
+                            {profile.followers.toLocaleString()}
+                          </motion.div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Progress bar */}
-                  <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: isActive ? `${Math.min((profile.followers / 500) * 100, 100)}%` : 0 }}
-                      transition={{ delay: 0.35, duration: 0.6, ease: 'easeOut' }}
-                      className="h-full bg-diff-comment"
-                    />
-                  </div>
-                  <div className="text-xs text-diff-neutral font-mono mt-2">
-                    Developers following your journey
+                    <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: isActive ? `${Math.min((profile.followers / 500) * 100, 100)}%` : 0 }}
+                        transition={{ delay: 0.36, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="h-full bg-diff-comment"
+                      />
+                    </div>
+                    <div className="text-xs text-diff-neutral/80 font-mono mt-2">
+                      Developers following your journey
+                    </div>
                   </div>
                 </motion.div>
 
                 {/* Top Project */}
                 {impact.topStarredRepo && (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-                    transition={{ delay: 0.4 }}
-                    className="bg-diff-bg border border-diff-border rounded-lg p-5"
+                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                    animate={{
+                      opacity: isActive ? 1 : 0,
+                      y: isActive ? 0 : 15,
+                      scale: isActive ? 1 : 0.95
+                    }}
+                    transition={{
+                      delay: 0.34,
+                      duration: 0.5,
+                      ease: [0.16, 1, 0.3, 1]
+                    }}
+                    className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xl">🏆</span>
-                      <span className="text-xs text-diff-neutral font-mono">Most Popular</span>
-                    </div>
-                    <div className="font-mono text-lg text-foreground font-bold">
-                      {impact.topStarredRepo}
+                    <div className="absolute inset-0 bg-gradient-to-br from-diff-highlight/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xl">🏆</span>
+                        <span className="text-[10px] text-diff-neutral/80 font-mono uppercase tracking-wider">Most Popular</span>
+                      </div>
+                      <div className="font-mono text-lg text-foreground font-bold text-display">
+                        {impact.topStarredRepo}
+                      </div>
                     </div>
                   </motion.div>
                 )}

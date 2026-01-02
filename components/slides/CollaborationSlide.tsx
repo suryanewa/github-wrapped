@@ -62,76 +62,144 @@ export function CollaborationSlide({ data, isActive }: SlideProps) {
             />
           </div>
 
-          {/* HERO - Work Style */}
+          {/* HERO - Work Style - Cinematic */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.1 }}
-            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="px-6 pt-12 pb-10 text-center border-b border-diff-border relative overflow-hidden"
           >
-            <div className="text-xs text-diff-neutral font-mono mb-4 uppercase tracking-wider">
-              Your Work Style
-            </div>
-            <motion.h2
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className={cn(
-                "text-5xl md:text-6xl font-bold font-mono mb-4",
-                collaboration.workStyle === 'community_builder' ? 'text-diff-addition' :
-                collaboration.workStyle === 'team_player' ? 'text-diff-comment' :
-                'text-diff-highlight'
-              )}
+            {/* Subtle background shimmer */}
+            <div className="absolute inset-0 animate-shimmer" />
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="text-[10px] text-diff-neutral/60 font-mono mb-3 uppercase tracking-[0.2em] font-medium"
             >
-              {message.title}
-            </motion.h2>
+              Your Work Style
+            </motion.div>
+
+            {/* Work Style Title with Glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, filter: "blur(10px)" }}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                scale: isActive ? 1 : 0.85,
+                filter: isActive ? "blur(0px)" : "blur(10px)"
+              }}
+              transition={{
+                delay: 0.25,
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1]
+              }}
+              className="relative inline-block mb-6"
+            >
+              <h2 className={cn(
+                "text-5xl md:text-6xl font-bold font-mono text-display relative z-10",
+                collaboration.workStyle === 'community_builder' && 'text-diff-addition text-glow-green',
+                collaboration.workStyle === 'team_player' && 'text-diff-comment text-glow-blue',
+                collaboration.workStyle === 'lone_wolf' && 'text-diff-highlight'
+              )}>
+                {message.title}
+              </h2>
+              {/* Glow layer for community_builder and team_player */}
+              {collaboration.workStyle !== 'lone_wolf' && (
+                <div className="absolute inset-0 blur-2xl opacity-30" style={{
+                  background: collaboration.workStyle === 'community_builder' ? 'var(--diff-addition)' : 'var(--diff-comment)'
+                }} />
+              )}
+            </motion.div>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-foreground/90 font-mono text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-6"
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="text-foreground/90 font-mono text-base md:text-lg text-body-refined leading-relaxed max-w-xl mx-auto mb-8"
             >
               {message.description}
             </motion.p>
 
-            {/* Key stats */}
+            {/* Key stats - Glass Morphism Cards */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.4 }}
-              className="grid grid-cols-2 gap-4 max-w-md mx-auto"
+              transition={{ delay: 0.6, duration: 0.4 }}
+              className="grid grid-cols-2 gap-3 max-w-md mx-auto"
             >
-              <div>
-                <div className="text-4xl font-bold font-mono text-diff-addition mb-1">
-                  {collaboration.externalRepos}
-                </div>
-                <div className="text-xs text-diff-neutral font-mono">external repos</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold font-mono text-diff-comment mb-1">
-                  {collaboration.uniqueDays}
-                </div>
-                <div className="text-xs text-diff-neutral font-mono">active days</div>
-              </div>
+              {[
+                { label: 'external repos', value: collaboration.externalRepos, color: 'text-diff-addition', glow: true },
+                { label: 'active days', value: collaboration.uniqueDays, color: 'text-diff-comment', glow: false }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.65 + index * 0.08,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-4 group hover-lift cursor-default relative overflow-hidden"
+                >
+                  <div className={cn(
+                    "absolute inset-0 bg-gradient-to-br to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+                    stat.color === 'text-diff-addition' ? 'from-diff-addition/5' : 'from-diff-comment/5'
+                  )} />
+                  <div className="relative z-10">
+                    <div className={cn(
+                      "text-4xl font-bold font-mono text-display mb-1 transition-all duration-300",
+                      stat.color,
+                      stat.glow && "group-hover:text-glow-green"
+                    )}>
+                      {stat.value}
+                    </div>
+                    <div className="text-[10px] text-diff-neutral/80 font-mono uppercase tracking-wider">
+                      {stat.label}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
           </motion.div>
 
-          {/* Supporting details - simplified */}
+          {/* Supporting details - Glass Panel */}
           {collaboration.diverseProjects && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-              transition={{ delay: 0.5 }}
-              className="px-6 py-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+              className="px-6 py-8"
             >
-              <div className="max-w-md mx-auto bg-diff-bg border border-diff-border rounded p-4 text-center">
-                <div className="text-xs text-diff-neutral font-mono mb-2 uppercase tracking-wider">
-                  Diverse Contributor
+              <motion.div
+                initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                animate={{
+                  opacity: isActive ? 1 : 0,
+                  y: isActive ? 0 : 15,
+                  scale: isActive ? 1 : 0.95
+                }}
+                transition={{
+                  delay: 0.65,
+                  duration: 0.5,
+                  ease: [0.16, 1, 0.3, 1]
+                }}
+                className="max-w-md mx-auto glass-panel rounded-lg p-4 text-center group hover-lift cursor-default relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-diff-comment/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="text-[10px] text-diff-neutral/80 font-mono mb-2 uppercase tracking-wider">
+                    Diverse Contributor
+                  </div>
+                  <div className="text-sm text-foreground/90 font-mono text-body-refined">
+                    Active across multiple project types and technologies
+                  </div>
                 </div>
-                <div className="text-sm text-foreground/90 font-mono">
-                  Active across multiple project types and technologies
-                </div>
-              </div>
+              </motion.div>
             </motion.div>
           )}
 

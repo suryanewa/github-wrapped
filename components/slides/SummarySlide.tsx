@@ -52,10 +52,12 @@ export function SummarySlide({ data, isActive }: SlideProps) {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="w-full max-w-2xl"
       >
-        {/* PR Summary Card */}
-        <div id="summary-card" className="bg-diff-surface border-2 border-diff-addition rounded-xl p-8 md:p-10 shadow-2xl">
+        {/* PR Summary Card - Premium Glass Morphism */}
+        <div id="summary-card" className="glass-panel border-2 border-diff-addition rounded-xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
+          {/* Subtle shimmer effect */}
+          <div className="absolute inset-0 animate-shimmer opacity-30" />
           {/* PR Header */}
-          <div className="flex items-start gap-3 mb-6 pb-6 border-b border-diff-neutral/30">
+          <div className="relative z-10 flex items-start gap-3 mb-6 pb-6 border-b border-diff-neutral/30">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-diff-addition flex items-center justify-center">
               <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" />
@@ -77,7 +79,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
           </div>
 
           {/* Archetype */}
-          <div className="mb-6 pb-6 border-b border-diff-neutral/30">
+          <div className="relative z-10 mb-6 pb-6 border-b border-diff-neutral/30">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🎭</span>
               <h3 className="font-serif text-xl text-foreground">
@@ -97,7 +99,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
           </div>
 
           {/* Key Stats */}
-          <div className="space-y-3 mb-6">
+          <div className="relative z-10 space-y-3 mb-6">
             <div className="flex items-center justify-between">
               <span className="text-diff-neutral font-mono text-sm">Total Contributions</span>
               <span className="text-diff-addition font-mono font-bold text-lg">
@@ -133,7 +135,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
           </div>
 
           {/* Footer */}
-          <div className="pt-6 border-t border-diff-neutral/30 flex items-center justify-between">
+          <div className="relative z-10 pt-6 border-t border-diff-neutral/30 flex items-center justify-between">
             <div className="text-xs text-diff-neutral font-mono">
               github-wrapped.dev
             </div>

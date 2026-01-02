@@ -84,67 +84,110 @@ export function RhythmSlide({ data, isActive }: SlideProps) {
             </div>
           </div>
 
-          {/* HERO - Peak Hour */}
+          {/* HERO - Peak Hour - Cinematic */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.1 }}
-            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="px-6 pt-12 pb-10 text-center border-b border-diff-border relative overflow-hidden"
           >
-            <div className="text-xs text-diff-neutral font-mono mb-4 uppercase tracking-wider">
-              Peak Coding Time
-            </div>
+            {/* Subtle background shimmer */}
+            <div className="absolute inset-0 animate-shimmer" />
+
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="text-7xl md:text-8xl font-bold font-mono text-diff-addition mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="text-[10px] text-diff-neutral/60 font-mono mb-3 uppercase tracking-[0.2em] font-medium"
             >
-              {formatHour(rhythm.peakHour)}
+              Peak Coding Time
             </motion.div>
+
+            {/* Peak Hour with Glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, filter: "blur(10px)" }}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                scale: isActive ? 1 : 0.85,
+                filter: isActive ? "blur(0px)" : "blur(10px)"
+              }}
+              transition={{
+                delay: 0.25,
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1]
+              }}
+              className="relative inline-block mb-4"
+            >
+              <div className="text-7xl md:text-8xl font-bold font-mono text-diff-addition text-display text-glow-green relative z-10">
+                {formatHour(rhythm.peakHour)}
+              </div>
+              <div className="absolute inset-0 blur-2xl bg-diff-addition/20 scale-110" />
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-lg text-diff-neutral font-mono mb-6"
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="text-lg text-diff-neutral font-mono text-body-refined mb-8"
             >
               {getTimeOfDayLabel(rhythm.peakHour)} developer
             </motion.div>
 
-            {/* Key stats below */}
+            {/* Key stats - Glass Morphism Cards */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.4 }}
-              className="grid grid-cols-3 gap-4 max-w-xl mx-auto"
+              transition={{ delay: 0.6, duration: 0.4 }}
+              className="grid grid-cols-3 gap-3 max-w-xl mx-auto"
             >
-              <div>
-                <div className="text-3xl font-bold font-mono text-diff-comment mb-1">
-                  {uniqueDays}
-                </div>
-                <div className="text-xs text-diff-neutral font-mono">active days</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold font-mono text-diff-highlight mb-1">
-                  {rhythm.longestStreak}
-                </div>
-                <div className="text-xs text-diff-neutral font-mono">day streak</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold font-mono text-foreground mb-1">
-                  {weekendPercentage}%
-                </div>
-                <div className="text-xs text-diff-neutral font-mono">weekends</div>
-              </div>
+              {[
+                { label: 'active days', value: uniqueDays, color: 'text-diff-comment', glow: false },
+                { label: 'day streak', value: rhythm.longestStreak, color: 'text-diff-highlight', glow: true },
+                { label: 'weekends', value: `${weekendPercentage}%`, color: 'text-foreground', glow: false }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.65 + index * 0.08,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-4 group hover-lift cursor-default relative overflow-hidden"
+                >
+                  <div className={cn(
+                    "absolute inset-0 bg-gradient-to-br to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+                    stat.color === 'text-diff-comment' ? 'from-diff-comment/5' :
+                    stat.color === 'text-diff-highlight' ? 'from-diff-highlight/5' : 'from-diff-addition/5'
+                  )} />
+                  <div className="relative z-10">
+                    <div className={cn(
+                      "text-3xl font-bold font-mono text-display mb-1 transition-all duration-300",
+                      stat.color,
+                      stat.glow && "group-hover:drop-shadow-[0_0_8px_rgba(240,136,62,0.5)]"
+                    )}>
+                      {stat.value}
+                    </div>
+                    <div className="text-[10px] text-diff-neutral/80 font-mono uppercase tracking-wider">
+                      {stat.label}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
           </motion.div>
 
-          {/* Weekly Pattern - Simplified */}
+          {/* Weekly Pattern - Glass Container */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.5 }}
-            className="px-6 py-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            className="px-6 py-8"
           >
             <div className="mb-4">
               <h3 className="text-xs text-diff-neutral font-mono uppercase tracking-wider">
@@ -152,44 +195,54 @@ export function RhythmSlide({ data, isActive }: SlideProps) {
               </h3>
             </div>
 
-            <div className="flex items-end gap-2 h-24 max-w-xl mx-auto">
-              {daysOfWeek.map((day, index) => {
-                const activity = weeklyActivity[index];
-                const height = (activity / maxWeeklyActivity) * 100;
-                const isPeak = day === rhythm.peakDay;
-                const isWeekend = index === 0 || index === 6;
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.98 }}
+              transition={{ delay: 0.65, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="glass-panel rounded-lg p-6 max-w-xl mx-auto"
+            >
+              <div className="flex items-end gap-2 h-24">
+                {daysOfWeek.map((day, index) => {
+                  const activity = weeklyActivity[index];
+                  const height = (activity / maxWeeklyActivity) * 100;
+                  const isPeak = day === rhythm.peakDay;
+                  const isWeekend = index === 0 || index === 6;
 
-                return (
-                  <motion.div
-                    key={day}
-                    initial={{ height: 0 }}
-                    animate={{ height: isActive ? `${height}%` : 0 }}
-                    transition={{
-                      delay: 0.55 + index * 0.05,
-                      duration: 0.4,
-                      ease: 'easeOut'
-                    }}
-                    className="flex-1 flex flex-col items-center"
-                  >
-                    <div className={cn(
-                      'w-full rounded-t transition-colors cursor-pointer',
-                      isPeak ? 'bg-diff-addition' :
-                      isWeekend ? 'bg-diff-highlight' : 'bg-diff-comment',
-                      'hover:brightness-110'
-                    )}
-                      title={`${day}: ${Math.round(activity)}% activity`}
-                    />
-                    <span className={cn(
-                      'text-xs font-mono mt-2',
-                      isPeak ? 'text-diff-addition font-bold' :
-                      isWeekend ? 'text-diff-highlight' : 'text-diff-neutral'
-                    )}>
-                      {day}
-                    </span>
-                  </motion.div>
-                );
-              })}
-            </div>
+                  return (
+                    <motion.div
+                      key={day}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{
+                        height: isActive ? `${height}%` : 0,
+                        opacity: isActive ? 1 : 0
+                      }}
+                      transition={{
+                        delay: 0.7 + index * 0.05,
+                        duration: 0.5,
+                        ease: [0.16, 1, 0.3, 1]
+                      }}
+                      className="flex-1 flex flex-col items-center group"
+                    >
+                      <div className={cn(
+                        'w-full rounded-t transition-all duration-300 cursor-pointer',
+                        isPeak ? 'bg-diff-addition shadow-[0_0_8px_var(--diff-addition)]' :
+                        isWeekend ? 'bg-diff-highlight' : 'bg-diff-comment',
+                        'group-hover:brightness-125 group-hover:scale-105'
+                      )}
+                        title={`${day}: ${Math.round(activity)}% activity`}
+                      />
+                      <span className={cn(
+                        'text-xs font-mono mt-2 transition-all duration-300',
+                        isPeak ? 'text-diff-addition font-bold text-display' :
+                        isWeekend ? 'text-diff-highlight' : 'text-diff-neutral'
+                      )}>
+                        {day}
+                      </span>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Review Comment */}

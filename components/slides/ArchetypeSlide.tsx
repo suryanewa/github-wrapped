@@ -61,67 +61,109 @@ export function ArchetypeSlide({ data, isActive }: SlideProps) {
             </div>
           </div>
 
-          {/* HERO - Archetype Name */}
+          {/* HERO - Archetype Name - Cinematic */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.1 }}
-            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="px-6 pt-12 pb-10 text-center border-b border-diff-border relative overflow-hidden"
           >
-            <div className="text-xs text-diff-neutral font-mono mb-4 uppercase tracking-wider">
-              Your Developer Archetype
-            </div>
-            <motion.h2
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className={cn(
-                "text-5xl md:text-6xl font-bold font-mono mb-4",
-                config.color
-              )}
+            {/* Subtle background shimmer */}
+            <div className="absolute inset-0 animate-shimmer" />
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="text-[10px] text-diff-neutral/60 font-mono mb-4 uppercase tracking-[0.2em] font-medium"
             >
-              {archetype.name}
-            </motion.h2>
+              Your Developer Archetype
+            </motion.div>
+
+            {/* Archetype Name with Rarity-based Glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, filter: "blur(10px)" }}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                scale: isActive ? 1 : 0.85,
+                filter: isActive ? "blur(0px)" : "blur(10px)"
+              }}
+              transition={{
+                delay: 0.25,
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1]
+              }}
+              className="relative inline-block mb-6"
+            >
+              <h2 className={cn(
+                "text-6xl md:text-7xl font-bold font-mono text-display relative z-10",
+                config.color,
+                archetype.rarity === 'legendary' && 'text-glow-blue',
+                archetype.rarity === 'rare' && 'text-glow-blue'
+              )}>
+                {archetype.name}
+              </h2>
+              {/* Glow layer for legendary/rare */}
+              {(archetype.rarity === 'legendary' || archetype.rarity === 'rare') && (
+                <div className="absolute inset-0 blur-2xl opacity-30" style={{
+                  background: archetype.rarity === 'legendary' ? 'var(--diff-highlight)' : 'var(--diff-comment)'
+                }} />
+              )}
+            </motion.div>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-foreground/90 font-mono text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="text-foreground/90 font-mono text-base md:text-lg text-body-refined max-w-2xl mx-auto leading-relaxed"
             >
               {archetype.description}
             </motion.p>
           </motion.div>
 
-          {/* Supporting Details - Simplified */}
+          {/* Supporting Details - Glass Cards */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.5 }}
-            className="px-6 py-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            className="px-6 py-8"
           >
             <div className="grid grid-cols-3 gap-3 max-w-xl mx-auto">
-              <div className="bg-diff-bg border border-diff-border rounded p-4 text-center">
-                <div className="text-xs text-diff-neutral font-mono mb-2">Rarity</div>
-                <div className={cn("text-lg font-bold font-mono", config.color)}>
-                  {config.label}
-                </div>
-              </div>
-              <div className="bg-diff-bg border border-diff-border rounded p-4 text-center">
-                <div className="text-xs text-diff-neutral font-mono mb-2">Pattern</div>
-                <div className="text-lg font-bold font-mono text-foreground">
-                  {archetype.rarity === 'legendary' ? 'Exceptional' :
+              {[
+                { label: 'Rarity', value: config.label, color: config.color },
+                { label: 'Pattern', value: archetype.rarity === 'legendary' ? 'Exceptional' :
                    archetype.rarity === 'rare' ? 'Distinctive' :
-                   archetype.rarity === 'uncommon' ? 'Notable' : 'Consistent'}
-                </div>
-              </div>
-              <div className="bg-diff-bg border border-diff-border rounded p-4 text-center">
-                <div className="text-xs text-diff-neutral font-mono mb-2">Prevalence</div>
-                <div className="text-lg font-bold font-mono text-foreground">
-                  {archetype.rarity === 'legendary' ? '<5%' :
+                   archetype.rarity === 'uncommon' ? 'Notable' : 'Consistent', color: 'text-foreground' },
+                { label: 'Prevalence', value: archetype.rarity === 'legendary' ? '<5%' :
                    archetype.rarity === 'rare' ? '<15%' :
-                   archetype.rarity === 'uncommon' ? '<35%' : '~50%'}
-                </div>
-              </div>
+                   archetype.rarity === 'uncommon' ? '<35%' : '~50%', color: 'text-foreground' }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.65 + index * 0.08,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-4 text-center group hover-lift cursor-default relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-diff-comment/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="text-[10px] text-diff-neutral/80 font-mono mb-2 uppercase tracking-wider">
+                      {item.label}
+                    </div>
+                    <div className={cn("text-xl font-bold font-mono text-display", item.color)}>
+                      {item.value}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
