@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { MetricBadge, StatusBadge } from '@/components/primitives';
 import { SlideProps } from '@/lib/types';
+import { Theater, Star } from 'lucide-react';
 
 export function SummarySlide({ data, isActive }: SlideProps) {
   const { username, year, archetype, contributions, repositories, languages, impact } = data;
@@ -81,7 +82,16 @@ export function SummarySlide({ data, isActive }: SlideProps) {
           {/* Archetype */}
           <div className="relative z-10 mb-6 pb-6 border-b border-diff-neutral/30">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">🎭</span>
+              <motion.div
+                initial={{ scale: 0.8, rotate: -10 }}
+                animate={{
+                  scale: isActive ? 1 : 0.8,
+                  rotate: isActive ? 0 : -10
+                }}
+                transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Theater className="w-6 h-6 text-diff-comment" strokeWidth={2} />
+              </motion.div>
               <h3 className="font-serif text-xl text-foreground">
                 {archetype.name}
               </h3>
@@ -127,8 +137,9 @@ export function SummarySlide({ data, isActive }: SlideProps) {
             {impact.starsEarned > 0 && (
               <div className="flex items-center justify-between">
                 <span className="text-diff-neutral font-mono text-sm">Stars Earned</span>
-                <span className="text-diff-highlight font-mono font-bold text-lg">
-                  ⭐ {impact.starsEarned.toLocaleString()}
+                <span className="text-diff-highlight font-mono font-bold text-lg flex items-center gap-2">
+                  <Star className="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  {impact.starsEarned.toLocaleString()}
                 </span>
               </div>
             )}

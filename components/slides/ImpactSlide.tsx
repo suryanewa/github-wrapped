@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FileHeader, ReviewComment, StatusBadge } from '@/components/primitives';
 import { SlideProps } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { Star, Trophy, Sprout } from 'lucide-react';
 
 export function ImpactSlide({ data, isActive }: SlideProps) {
   const { impact, profile } = data;
@@ -62,9 +63,17 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
                   <div className="relative z-10">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center border border-diff-highlight/30">
-                          <span className="text-xl">⭐</span>
-                        </div>
+                        <motion.div
+                          initial={{ scale: 0.8, rotate: -15 }}
+                          animate={{
+                            scale: isActive ? 1 : 0.8,
+                            rotate: isActive ? 0 : -15
+                          }}
+                          transition={{ delay: 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                          className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center border border-diff-highlight/30"
+                        >
+                          <Star className="w-5 h-5 text-diff-highlight" fill="currentColor" strokeWidth={0} />
+                        </motion.div>
                         <div>
                           <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Stars Earned</div>
                           <motion.div
@@ -228,7 +237,16 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
 
                     <div className="relative z-10">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xl">🏆</span>
+                        <motion.div
+                          initial={{ scale: 0.8, y: 5 }}
+                          animate={{
+                            scale: isActive ? [0.8, 1.1, 1] : 0.8,
+                            y: isActive ? 0 : 5
+                          }}
+                          transition={{ delay: 0.39, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                          <Trophy className="w-5 h-5 text-diff-highlight" fill="currentColor" strokeWidth={0.5} />
+                        </motion.div>
                         <span className="text-[10px] text-diff-neutral/80 font-mono uppercase tracking-wider">Most Popular</span>
                       </div>
                       <div className="font-mono text-lg text-foreground font-bold text-display">
@@ -242,7 +260,17 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
           ) : (
             <div className="px-6 py-8">
               <div className="text-center space-y-4">
-                <div className="text-4xl">🌱</div>
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{
+                    scale: isActive ? 1 : 0.8,
+                    opacity: isActive ? 1 : 0
+                  }}
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                  className="flex justify-center"
+                >
+                  <Sprout className="w-12 h-12 text-diff-addition" strokeWidth={1.5} />
+                </motion.div>
                 <h3 className="font-mono text-xl text-foreground">
                   Building Foundations
                 </h3>

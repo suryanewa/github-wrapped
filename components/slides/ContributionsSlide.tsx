@@ -4,16 +4,17 @@ import { motion } from 'framer-motion';
 import { FileHeader, DiffLine, ReviewComment } from '@/components/primitives';
 import { ContributionHeatmap } from '@/components/primitives/ContributionHeatmap';
 import { SlideProps } from '@/lib/types';
+import { BarChart3, GitCommit, GitPullRequest, MessageSquare, Eye } from 'lucide-react';
 
 export function ContributionsSlide({ data, isActive }: SlideProps) {
   const { contributions, year } = data;
 
   const stats = [
-    { label: 'Total contributions', value: contributions.total, icon: '📊' },
-    { label: 'Commits pushed', value: contributions.commits, icon: '💾' },
-    { label: 'Pull requests', value: contributions.prs, icon: '🔀' },
-    { label: 'Issues engaged', value: contributions.issues, icon: '💬' },
-    ...(contributions.reviews > 0 ? [{ label: 'Code reviews', value: contributions.reviews, icon: '👀' }] : []),
+    { label: 'Total contributions', value: contributions.total, Icon: BarChart3 },
+    { label: 'Commits pushed', value: contributions.commits, Icon: GitCommit },
+    { label: 'Pull requests', value: contributions.prs, Icon: GitPullRequest },
+    { label: 'Issues engaged', value: contributions.issues, Icon: MessageSquare },
+    ...(contributions.reviews > 0 ? [{ label: 'Code reviews', value: contributions.reviews, Icon: Eye }] : []),
   ];
 
   return (
@@ -111,15 +112,16 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
 
                   <div className="relative z-10">
                     <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
+                      initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
                       animate={{
                         scale: isActive ? 1 : 0.8,
-                        opacity: isActive ? 1 : 0
+                        opacity: isActive ? 1 : 0,
+                        rotate: isActive ? 0 : -10
                       }}
-                      transition={{ delay: 0.7 + index * 0.08, duration: 0.4 }}
-                      className="text-2xl mb-2 filter drop-shadow-lg"
+                      transition={{ delay: 0.7 + index * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className="mb-2 filter drop-shadow-lg"
                     >
-                      {stat.icon}
+                      <stat.Icon className="w-6 h-6 text-diff-addition" strokeWidth={2} />
                     </motion.div>
                     <div className="text-3xl font-bold font-mono text-diff-addition text-display mb-2 group-hover:text-glow-green transition-all duration-300">
                       {stat.value.toLocaleString()}
