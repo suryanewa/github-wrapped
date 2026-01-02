@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { WrappedData } from '@/lib/types';
+import { SLIDE_DECK } from '@/lib/slides';
 
 interface ExperienceControllerProps {
   data: WrappedData;
@@ -11,7 +12,7 @@ interface ExperienceControllerProps {
 
 export function ExperienceController({ data, onExit }: ExperienceControllerProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 9; // Placeholder - will be dynamic based on slide deck
+  const totalSlides = SLIDE_DECK.length;
 
   const nextSlide = useCallback(() => {
     if (currentSlide < totalSlides - 1) {
@@ -80,15 +81,11 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
-              {/* Placeholder for slides - will be replaced with actual slide components */}
-              <div className="bg-diff-surface rounded-lg border border-diff-neutral/30 p-8">
-                <h2 className="font-serif text-3xl text-foreground mb-4">
-                  Slide {currentSlide + 1}
-                </h2>
-                <p className="text-diff-neutral">
-                  Slide content will go here. Use arrow keys or space to navigate.
-                </p>
-              </div>
+              {(() => {
+                const slide = SLIDE_DECK[currentSlide];
+                const SlideComponent = slide.component;
+                return <SlideComponent data={data} isActive={true} />;
+              })()}
             </motion.div>
           </AnimatePresence>
         </div>
