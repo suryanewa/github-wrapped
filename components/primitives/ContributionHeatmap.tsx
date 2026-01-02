@@ -4,41 +4,48 @@ import { cn } from '@/lib/utils';
 interface ContributionHeatmapProps {
   totalContributions: number;
   year: number;
+  dailyContributions: Record<string, number>;
   isActive?: boolean;
 }
 
-export function ContributionHeatmap({ totalContributions, year, isActive = true }: ContributionHeatmapProps) {
-  // Generate simulated contribution data (in production, this would come from actual data)
+export function ContributionHeatmap({ totalContributions, year, dailyContributions, isActive = true }: ContributionHeatmapProps) {
   const weeks = 52;
   const daysInWeek = 7;
 
-  // Create a distribution that looks realistic
-  const generateLevel = (weekIndex: number, dayIndex: number) => {
-    // More activity in middle of year, less at edges
-    const yearProgress = weekIndex / weeks;
-    const baseProbability = Math.sin(yearProgress * Math.PI) * 0.7 + 0.3;
+  // Calculate the start date (first Sunday of the year or before)
+  const startOfYear = new Date(year, 0, 1);
+  const startDay = startOfYear.getDay(); // 0 = Sunday, 6 = Saturday
+  const firstSunday = new Date(startOfYear);
+  firstSunday.setDate(startOfYear.getDate() - startDay);
 
-    // Less activity on weekends
-    const isWeekend = dayIndex === 0 || dayIndex === 6;
-    const dayMultiplier = isWeekend ? 0.5 : 1;
+  // Calculate max contributions for scaling
+  const maxContributions = Math.max(...Object.values(dailyContributions), 1);
 
-    const random = Math.random();
-    const adjustedRandom = random * baseProbability * dayMultiplier;
-
-    if (adjustedRandom < 0.2) return 0;
-    if (adjustedRandom < 0.4) return 1;
-    if (adjustedRandom < 0.6) return 2;
-    if (adjustedRandom < 0.8) return 3;
+  // Get contribution level (0-4) based on count
+  const getLevel = (count: number): number => {
+    if (count === 0) return 0;
+    const ratio = count / maxContributions;
+    if (ratio <= 0.25) return 1;
+    if (ratio <= 0.50) return 2;
+    if (ratio <= 0.75) return 3;
     return 4;
   };
 
+  // Get date for a specific week/day position
+  const getDateForPosition = (weekIndex: number, dayIndex: number): string => {
+    const date = new Date(firstSunday);
+    date.setDate(firstSunday.getDate() + (weekIndex * 7) + dayIndex);
+    return date.toISOString().split('T')[0];
+  };
+
+  // Get level color with proper GitHub-style green shades
   const getLevelColor = (level: number) => {
     switch (level) {
       case 0: return 'bg-diff-gutter';
-      case 1: return 'bg-diff-success/20';
-      case 2: return 'bg-diff-success/40';
-      case 3: return 'bg-diff-success/60';
-      case 4: return 'bg-diff-success';
+      case 1: return 'bg-green-900/40';
+      case 2: return 'bg-green-700/60';
+      case 3: return 'bg-green-500/80';
+      case 4: return 'bg-green-400';
       default: return 'bg-diff-gutter';
     }
   };
@@ -80,7 +87,9 @@ export function ContributionHeatmap({ totalContributions, year, isActive = true 
             {Array.from({ length: weeks }).map((_, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-[3px]">
                 {Array.from({ length: daysInWeek }).map((_, dayIndex) => {
-                  const level = generateLevel(weekIndex, dayIndex);
+                  const dateStr = getDateForPosition(weekIndex, dayIndex);
+                  const count = dailyContributions[dateStr] || 0;
+                  const level = getLevel(count);
                   const delay = (weekIndex * daysInWeek + dayIndex) * 0.002;
 
                   return (
@@ -99,9 +108,9 @@ export function ContributionHeatmap({ totalContributions, year, isActive = true 
                       className={cn(
                         'w-[11px] h-[11px] rounded-sm border border-diff-border/30 transition-all',
                         getLevelColor(level),
-                        level > 0 && 'hover:ring-1 hover:ring-diff-success hover:scale-110 cursor-pointer'
+                        level > 0 && 'hover:ring-1 hover:ring-green-400 hover:scale-110 cursor-pointer'
                       )}
-                      title={`${level} contributions`}
+                      title={`${dateStr}: ${count} ${count === 1 ? 'contribution' : 'contributions'}`}
                     />
                   );
                 })}

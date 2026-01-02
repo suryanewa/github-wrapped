@@ -13,6 +13,7 @@ export interface WrappedData {
     prs: number;
     issues: number;
     reviews: number;
+    dailyContributions: Record<string, number>; // YYYY-MM-DD -> count
   };
   archetype: {
     name: string;

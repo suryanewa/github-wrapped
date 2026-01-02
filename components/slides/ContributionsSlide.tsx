@@ -97,6 +97,7 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
             <ContributionHeatmap
               totalContributions={contributions.total}
               year={year}
+              dailyContributions={contributions.dailyContributions}
               isActive={isActive}
             />
           </motion.div>

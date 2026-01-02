@@ -46,6 +46,7 @@ interface ContributionStats {
   prs: number;
   issues: number;
   reviews: number;
+  dailyContributions: Record<string, number>;
 }
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -58,8 +59,13 @@ export function analyzeContributions(events: Event[]): ContributionStats {
   let prs = 0;
   let issues = 0;
   let reviews = 0;
+  const dailyContributions: Record<string, number> = {};
 
   for (const event of events) {
+    // Track daily contributions
+    const dateStr = event.created_at.split('T')[0]; // YYYY-MM-DD
+    dailyContributions[dateStr] = (dailyContributions[dateStr] || 0) + 1;
+
     switch (event.type) {
       case 'PushEvent':
         commits += event.payload.commits?.length || 1;
@@ -84,6 +90,7 @@ export function analyzeContributions(events: Event[]): ContributionStats {
     prs,
     issues,
     reviews,
+    dailyContributions,
   };
 }
 
