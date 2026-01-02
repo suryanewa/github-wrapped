@@ -9,6 +9,11 @@ import { ReviewComment } from '@/components/primitives/ReviewComment';
 export function CollaborationSlide({ data, isActive }: SlideProps) {
   const { collaboration } = data;
 
+  // Early return if collaboration data is not available
+  if (!collaboration) {
+    return null;
+  }
+
   // Determine messaging based on work style
   const getMessage = () => {
     switch (collaboration.workStyle) {

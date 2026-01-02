@@ -7,6 +7,9 @@ import { SlideProps } from '@/lib/types';
 export function RhythmSlide({ data }: SlideProps) {
   const { rhythm, collaboration } = data;
 
+  // Fallback for collaboration data (for cached/old API responses)
+  const uniqueDays = collaboration?.uniqueDays ?? rhythm.longestStreak;
+
   const formatHour = (hour: number): string => {
     if (hour === 0) return '12:00 AM';
     if (hour < 12) return `${hour}:00 AM`;
@@ -103,14 +106,14 @@ export function RhythmSlide({ data }: SlideProps) {
                   <span className="font-mono text-sm text-diff-neutral">Days Active</span>
                 </div>
                 <div className="font-mono text-2xl text-diff-addition font-bold">
-                  {collaboration.uniqueDays}
+                  {uniqueDays}
                 </div>
                 <div className="text-sm text-diff-neutral mt-1">
-                  {collaboration.uniqueDays > 200
+                  {uniqueDays > 200
                     ? 'Highly consistent'
-                    : collaboration.uniqueDays > 100
+                    : uniqueDays > 100
                     ? 'Regular contributor'
-                    : collaboration.uniqueDays > 50
+                    : uniqueDays > 50
                     ? 'Active developer'
                     : 'Building momentum'}
                 </div>
