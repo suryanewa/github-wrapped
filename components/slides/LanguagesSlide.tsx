@@ -26,8 +26,9 @@ export function LanguagesSlide({ data, isActive }: SlideProps) {
     );
   }
 
-  // Calculate total lines for percentage bars
-  const totalLines = languages.reduce((sum, lang) => sum + lang.linesWritten, 0);
+  // Primary and secondary languages
+  const primaryLang = languages[0];
+  const secondaryLangs = languages.slice(1, 4); // Show top 4 total
 
   return (
     <motion.div
@@ -36,184 +37,129 @@ export function LanguagesSlide({ data, isActive }: SlideProps) {
       className="w-full"
     >
       <div className="max-w-4xl">
-        <FileHeader filename="languages.json" type="file" status="modified" />
+        <FileHeader filename="tech-stack.md" type="file" status="modified" />
 
         <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg">
-          {/* Language badge */}
+          {/* Header */}
           <div className="px-6 py-3 border-b border-diff-border flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <StatusBadge status="neutral" label="JSON" icon={false} />
-              <span className="text-xs text-diff-neutral font-mono">
-                Language distribution analysis
-              </span>
+              <StatusBadge status="neutral" label="Technology Stack" icon={false} />
             </div>
             <div className="text-xs text-diff-neutral font-mono">
               {languages.length} {languages.length === 1 ? 'language' : 'languages'}
             </div>
           </div>
 
-          {/* Code Editor View with Line Numbers */}
-          <div className="relative">
-            {/* Line numbers gutter */}
-            <div className="absolute left-0 top-0 bottom-0 w-12 bg-diff-gutter border-r border-diff-border flex flex-col font-mono text-xs text-diff-gutter-text text-right pr-3 py-4 select-none">
-              {['1', '2', ...languages.map((_, i) => String(3 + i)), String(3 + languages.length)].map((num, i) => (
-                <div key={i} className="leading-relaxed h-6">
-                  {num}
-                </div>
-              ))}
-            </div>
-
-            {/* JSON content */}
-            <div className="pl-14 pr-6 py-4 font-mono text-sm space-y-0">
-              {/* Opening brace */}
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
-                transition={{ delay: 0.1 }}
-                className="leading-relaxed h-6 text-foreground"
-              >
-                {'{'}
-              </motion.div>
-
-              {/* "languages" key */}
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
-                transition={{ delay: 0.15 }}
-                className="leading-relaxed h-6"
-              >
-                <span className="text-foreground">  </span>
-                <span className="text-diff-string">"languages"</span>
-                <span className="text-foreground">: [</span>
-              </motion.div>
-
-              {/* Language entries */}
-              {languages.map((lang, index) => (
-                <motion.div
-                  key={lang.name}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
-                  transition={{ delay: 0.2 + index * 0.05 }}
-                  className="leading-relaxed h-6"
-                >
-                  <span className="text-foreground">    {'{ '}</span>
-                  <span className="text-diff-string">"name"</span>
-                  <span className="text-foreground">: </span>
-                  <span className="text-diff-string">"{lang.name}"</span>
-                  <span className="text-foreground">, </span>
-                  <span className="text-diff-string">"percentage"</span>
-                  <span className="text-foreground">: </span>
-                  <span className="text-diff-keyword">{lang.percentage}</span>
-                  <span className="text-foreground">, </span>
-                  <span className="text-diff-string">"lines"</span>
-                  <span className="text-foreground">: </span>
-                  <span className="text-diff-keyword">{lang.linesWritten.toLocaleString()}</span>
-                  <span className="text-foreground"> {'}'}{index < languages.length - 1 ? ',' : ''}</span>
-                </motion.div>
-              ))}
-
-              {/* Closing bracket */}
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
-                transition={{ delay: 0.2 + languages.length * 0.05 }}
-                className="leading-relaxed h-6 text-foreground"
-              >
-                {'  ]'}
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
-                transition={{ delay: 0.25 + languages.length * 0.05 }}
-                className="leading-relaxed h-6 text-foreground"
-              >
-                {'}'}
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Visual Chart Section */}
+          {/* HERO - Primary Language */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.4 + languages.length * 0.05 }}
-            className="px-6 py-6 border-t border-diff-border"
+            transition={{ delay: 0.1 }}
+            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
           >
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-foreground mb-1 font-mono">
-                Distribution Visualization
-              </h3>
-              <p className="text-xs text-diff-neutral font-mono">
-                Relative language usage by lines of code
-              </p>
+            <div className="text-xs text-diff-neutral font-mono mb-4 uppercase tracking-wider">
+              Primary Language
             </div>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="text-6xl md:text-7xl font-bold font-mono text-diff-comment mb-6"
+            >
+              {primaryLang.name}
+            </motion.div>
 
-            {/* Horizontal stacked bar */}
-            <div className="w-full h-8 bg-diff-gutter rounded overflow-hidden flex mb-4">
-              {languages.map((lang, index) => {
-                const colors = [
-                  'bg-diff-addition',
-                  'bg-diff-comment',
-                  'bg-diff-highlight',
-                  'bg-diff-warning',
-                  'bg-diff-deletion',
-                ];
-                const color = colors[index % colors.length];
-
-                return (
-                  <motion.div
-                    key={lang.name}
-                    initial={{ width: 0 }}
-                    animate={{ width: isActive ? `${lang.percentage}%` : 0 }}
-                    transition={{
-                      delay: 0.5 + languages.length * 0.05 + index * 0.1,
-                      duration: 0.6,
-                      ease: 'easeOut'
-                    }}
-                    className={`${color} flex items-center justify-center text-xs font-mono font-bold text-black hover:brightness-110 transition-all cursor-pointer`}
-                    title={`${lang.name}: ${lang.percentage}%`}
-                  >
-                    {lang.percentage > 8 && lang.name}
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {/* Legend */}
-            <div className="grid grid-cols-2 gap-2">
-              {languages.map((lang, index) => {
-                const colors = [
-                  { bg: 'bg-diff-addition/10', text: 'text-diff-addition', dot: 'bg-diff-addition' },
-                  { bg: 'bg-diff-comment/10', text: 'text-diff-comment', dot: 'bg-diff-comment' },
-                  { bg: 'bg-diff-highlight/10', text: 'text-diff-highlight', dot: 'bg-diff-highlight' },
-                  { bg: 'bg-diff-warning/10', text: 'text-diff-warning', dot: 'bg-diff-warning' },
-                  { bg: 'bg-diff-deletion/10', text: 'text-diff-deletion', dot: 'bg-diff-deletion' },
-                ];
-                const colorSet = colors[index % colors.length];
-
-                return (
-                  <motion.div
-                    key={lang.name}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -8 }}
-                    transition={{ delay: 0.7 + languages.length * 0.05 + index * 0.05 }}
-                    className={`${colorSet.bg} ${colorSet.text} px-3 py-2 rounded flex items-center gap-2`}
-                  >
-                    <div className={`w-2 h-2 rounded-full ${colorSet.dot}`} />
-                    <span className="text-xs font-mono font-semibold flex-1">{lang.name}</span>
-                    <span className="text-xs font-mono">{lang.percentage}%</span>
-                  </motion.div>
-                );
-              })}
-            </div>
+            {/* Percentage bar */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-md mx-auto"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-diff-neutral font-mono">
+                  of your codebase
+                </span>
+                <span className="text-3xl font-bold font-mono text-diff-comment">
+                  {primaryLang.percentage}%
+                </span>
+              </div>
+              <div className="w-full bg-diff-gutter rounded-full h-4 overflow-hidden border border-diff-border">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: isActive ? `${primaryLang.percentage}%` : 0 }}
+                  transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+                  className="h-full bg-diff-comment"
+                />
+              </div>
+              <div className="text-xs text-diff-neutral font-mono mt-2">
+                ~{primaryLang.linesWritten.toLocaleString()} lines written
+              </div>
+            </motion.div>
           </motion.div>
+
+          {/* Secondary Languages - if more than 1 */}
+          {secondaryLangs.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+              transition={{ delay: 0.5 }}
+              className="px-6 py-6"
+            >
+              <div className="mb-4">
+                <h3 className="text-xs text-diff-neutral font-mono uppercase tracking-wider">
+                  Also Using
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-2xl mx-auto">
+                {secondaryLangs.map((lang, index) => (
+                  <motion.div
+                    key={lang.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+                    transition={{ delay: 0.55 + index * 0.08 }}
+                    className="bg-diff-bg border border-diff-border rounded p-4 text-center"
+                  >
+                    <div className="text-xl font-bold font-mono text-foreground mb-1">
+                      {lang.name}
+                    </div>
+                    <div className="text-2xl font-bold font-mono text-diff-addition mb-2">
+                      {lang.percentage}%
+                    </div>
+                    <div className="w-full bg-diff-gutter rounded-full h-1.5 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: isActive ? `${lang.percentage}%` : 0 }}
+                        transition={{ delay: 0.6 + index * 0.08, duration: 0.6, ease: 'easeOut' }}
+                        className="h-full bg-diff-addition"
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Show count if more languages */}
+              {languages.length > 4 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isActive ? 1 : 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-center mt-4"
+                >
+                  <span className="text-xs text-diff-neutral font-mono">
+                    + {languages.length - 4} more {languages.length - 4 === 1 ? 'language' : 'languages'}
+                  </span>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
 
           {/* Review Comment */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-            transition={{ delay: 0.9 + languages.length * 0.05 }}
-            className="px-6 pb-6"
+            transition={{ delay: 0.7 }}
+            className="px-6 pb-6 border-t border-diff-border pt-4"
           >
             <ReviewComment author="github-wrapped-bot" timestamp="just now">
               {languages.length >= 5

@@ -27,8 +27,9 @@ export function RepositoriesSlide({ data, isActive }: SlideProps) {
     );
   }
 
-  const topRepos = repositories.slice(0, 5);
-  const totalCommits = topRepos.reduce((sum, repo) => sum + repo.commits, 0);
+  const topRepo = repositories[0];
+  const otherRepos = repositories.slice(1, 4); // Show top 4 total
+  const totalCommits = repositories.reduce((sum, repo) => sum + repo.commits, 0);
 
   return (
     <motion.div
@@ -37,122 +38,161 @@ export function RepositoriesSlide({ data, isActive }: SlideProps) {
       className="w-full"
     >
       <div className="max-w-4xl">
-        <FileHeader filename="repositories.diff" type="diff" status="modified" />
+        <FileHeader filename="top-projects.md" type="file" status="modified" />
 
         <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg">
-          {/* Diff header */}
-          <div className="px-6 py-3 bg-diff-bg border-b border-diff-border font-mono text-xs text-diff-comment">
-            @@ Showing {topRepos.length} changed {topRepos.length === 1 ? 'file' : 'files'} with {totalCommits.toLocaleString()} commits @@
+          {/* Header */}
+          <div className="px-6 py-3 bg-diff-bg border-b border-diff-border flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <StatusBadge status="neutral" label="Top Projects" icon={false} />
+            </div>
+            <span className="font-mono text-xs text-diff-comment">
+              {totalCommits.toLocaleString()} total commits
+            </span>
           </div>
 
-          {/* Repository list */}
-          <div className="divide-y divide-diff-border">
-            {topRepos.map((repo, index) => {
-              const totalChanges = repo.additions + repo.deletions;
-              const additionPercent = totalChanges > 0 ? (repo.additions / totalChanges) * 100 : 50;
-              const deletionPercent = totalChanges > 0 ? (repo.deletions / totalChanges) * 100 : 50;
+          {/* HERO - Top Repository */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+            transition={{ delay: 0.1 }}
+            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
+          >
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-full bg-diff-highlight/20 flex items-center justify-center">
+                <span className="text-lg font-bold font-mono text-diff-highlight">#1</span>
+              </div>
+              <span className="text-xs text-diff-neutral font-mono uppercase tracking-wider">
+                Most Active Repository
+              </span>
+            </div>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="text-4xl md:text-5xl font-bold font-mono text-foreground mb-6"
+            >
+              {topRepo.name}
+            </motion.div>
 
-              return (
+            {/* Stats for top repo */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-xl mx-auto"
+            >
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <div className="text-3xl font-bold font-mono text-diff-comment mb-1">
+                    {topRepo.commits}
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono">commits</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold font-mono text-diff-addition mb-1">
+                    +{topRepo.additions.toLocaleString()}
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono">additions</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold font-mono text-diff-deletion mb-1">
+                    −{topRepo.deletions.toLocaleString()}
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono">deletions</div>
+                </div>
+              </div>
+
+              {/* Diff bar for top repo */}
+              <div className="flex h-3 rounded-full overflow-hidden bg-diff-gutter">
                 <motion.div
-                  key={repo.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-                  transition={{ delay: 0.1 + index * 0.08 }}
-                  className="px-6 py-4 hover:bg-diff-surface-hover/30 transition-colors"
-                >
-                  {/* Repository header */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <StatusBadge status="neutral" label={`#${index + 1}`} icon={false} />
-                      <span className="font-mono text-foreground font-semibold">
-                        {repo.name}
+                  initial={{ width: 0 }}
+                  animate={{ width: isActive ? `${(topRepo.additions / (topRepo.additions + topRepo.deletions)) * 100}%` : 0 }}
+                  transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+                  className="bg-diff-addition"
+                />
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: isActive ? `${(topRepo.deletions / (topRepo.additions + topRepo.deletions)) * 100}%` : 0 }}
+                  transition={{ delay: 0.4, duration: 0.8, ease: 'easeOut' }}
+                  className="bg-diff-deletion"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Other Top Repos */}
+          {otherRepos.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+              transition={{ delay: 0.5 }}
+              className="px-6 py-6"
+            >
+              <div className="mb-4">
+                <h3 className="text-xs text-diff-neutral font-mono uppercase tracking-wider">
+                  Other Active Projects
+                </h3>
+              </div>
+              <div className="space-y-3 max-w-2xl mx-auto">
+                {otherRepos.map((repo, index) => (
+                  <motion.div
+                    key={repo.name}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -10 }}
+                    transition={{ delay: 0.55 + index * 0.08 }}
+                    className="bg-diff-bg border border-diff-border rounded p-4"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono text-diff-neutral">#{index + 2}</span>
+                        <span className="font-mono text-foreground font-semibold">
+                          {repo.name}
+                        </span>
+                      </div>
+                      <span className="text-sm font-mono text-diff-comment font-bold">
+                        {repo.commits} commits
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-diff-neutral" fill="currentColor" viewBox="0 0 16 16">
-                        <path fillRule="evenodd" d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z" />
-                      </svg>
-                      <span className="font-mono text-sm text-diff-neutral">
-                        {repo.commits.toLocaleString()} {repo.commits === 1 ? 'commit' : 'commits'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Diff stat visualization */}
-                  <div className="flex items-center gap-3">
-                    {/* Visual bar */}
-                    <div className="flex-1 flex h-2 rounded-full overflow-hidden bg-diff-gutter">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive ? `${additionPercent}%` : 0 }}
-                        transition={{
-                          delay: 0.2 + index * 0.08,
-                          duration: 0.5,
-                          ease: 'easeOut'
-                        }}
-                        className="bg-diff-addition"
-                      />
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive ? `${deletionPercent}%` : 0 }}
-                        transition={{
-                          delay: 0.2 + index * 0.08,
-                          duration: 0.5,
-                          ease: 'easeOut'
-                        }}
-                        className="bg-diff-deletion"
-                      />
-                    </div>
-
-                    {/* Stats */}
-                    <div className="flex items-center gap-3 font-mono text-xs shrink-0">
-                      <span className="text-diff-addition font-semibold">
+                      <div className="flex-1 flex h-1.5 rounded-full overflow-hidden bg-diff-gutter">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: isActive ? `${(repo.additions / (repo.additions + repo.deletions)) * 100}%` : 0 }}
+                          transition={{ delay: 0.6 + index * 0.08, duration: 0.6, ease: 'easeOut' }}
+                          className="bg-diff-addition"
+                        />
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: isActive ? `${(repo.deletions / (repo.additions + repo.deletions)) * 100}%` : 0 }}
+                          transition={{ delay: 0.6 + index * 0.08, duration: 0.6, ease: 'easeOut' }}
+                          className="bg-diff-deletion"
+                        />
+                      </div>
+                      <span className="text-xs font-mono text-diff-addition font-semibold">
                         +{repo.additions.toLocaleString()}
                       </span>
-                      <span className="text-diff-deletion font-semibold">
+                      <span className="text-xs font-mono text-diff-deletion font-semibold">
                         −{repo.deletions.toLocaleString()}
                       </span>
                     </div>
-                  </div>
-
-                  {/* Impact indicator */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ delay: 0.3 + index * 0.08 }}
-                    className="mt-2 flex items-center gap-2"
-                  >
-                    <div className={cn(
-                      'h-1 rounded-full',
-                      repo.commits > 50 ? 'w-16 bg-diff-addition' :
-                      repo.commits > 20 ? 'w-12 bg-diff-comment' :
-                      repo.commits > 10 ? 'w-8 bg-diff-highlight' :
-                      'w-4 bg-diff-neutral'
-                    )} />
-                    <span className="text-xs font-mono text-diff-neutral">
-                      {repo.commits > 50 ? 'High activity' :
-                       repo.commits > 20 ? 'Active' :
-                       repo.commits > 10 ? 'Moderate' :
-                       'Light contributions'}
-                    </span>
                   </motion.div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Summary stats */}
-          {repositories.length > 5 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-              transition={{ delay: 0.5 + topRepos.length * 0.08 }}
-              className="px-6 py-4 border-t border-diff-border bg-diff-gutter/30"
-            >
-              <div className="flex items-center justify-between font-mono text-xs text-diff-neutral">
-                <span>Showing top {topRepos.length} of {repositories.length} repositories</span>
-                <span>{repositories.length - 5} more not shown</span>
+                ))}
               </div>
+
+              {/* Show count if more repositories */}
+              {repositories.length > 4 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isActive ? 1 : 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-center mt-4"
+                >
+                  <span className="text-xs text-diff-neutral font-mono">
+                    + {repositories.length - 4} more {repositories.length - 4 === 1 ? 'repository' : 'repositories'}
+                  </span>
+                </motion.div>
+              )}
             </motion.div>
           )}
 
@@ -160,8 +200,8 @@ export function RepositoriesSlide({ data, isActive }: SlideProps) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-            transition={{ delay: 0.7 + topRepos.length * 0.08 }}
-            className="px-6 pb-6 pt-4"
+            transition={{ delay: 0.7 }}
+            className="px-6 pb-6 pt-4 border-t border-diff-border"
           >
             <ReviewComment author="github-wrapped-bot" timestamp="just now">
               {repositories.length > 10

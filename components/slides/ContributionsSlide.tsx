@@ -28,77 +28,71 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
         <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg">
           {/* Diff Header */}
           <div className="px-6 py-3 bg-diff-bg border-b border-diff-border font-mono text-xs text-diff-comment">
-            @@ -1,1 +1,{stats.length} @@
+            @@ {year} Activity Summary @@
           </div>
 
-          {/* Stats as Diff Lines */}
-          <div className="px-6 py-4 space-y-1">
+          {/* HERO NUMBER - Make it unmissable */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+            transition={{ delay: 0.1 }}
+            className="px-6 pt-8 pb-6 text-center border-b border-diff-border"
+          >
+            <div className="text-xs text-diff-neutral font-mono mb-2 uppercase tracking-wider">
+              Total Contributions
+            </div>
             <motion.div
-              initial={{ opacity: 0, x: -4 }}
-              animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -4 }}
-              transition={{ delay: 0.1 }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="text-7xl md:text-8xl font-bold font-mono text-diff-addition mb-2"
             >
-              <DiffLine type="deletion" lineNumber={1} showGutter={false}>
-                {year - 1} contributions
-              </DiffLine>
+              {contributions.total.toLocaleString()}
             </motion.div>
+            <div className="text-sm text-diff-neutral font-mono">
+              commits pushed, PRs opened, issues engaged in {year}
+            </div>
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: -4 }}
-              animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -4 }}
-              transition={{ delay: 0.15 }}
-            >
-              <DiffLine type="addition" lineNumber={2} showGutter={false}>
-                <span className="font-bold text-xl">{contributions.total.toLocaleString()}</span>
-                {' '}contributions made in {year}
-              </DiffLine>
-            </motion.div>
+          {/* Breakdown - Cleaner grid layout */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+            transition={{ delay: 0.3 }}
+            className="px-6 py-6 border-b border-diff-border"
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+                  transition={{ delay: 0.35 + index * 0.05 }}
+                  className="bg-diff-bg border border-diff-border rounded p-3 text-center"
+                >
+                  <div className="text-xl mb-1">{stat.icon}</div>
+                  <div className="text-2xl font-bold font-mono text-diff-addition mb-1">
+                    {stat.value.toLocaleString()}
+                  </div>
+                  <div className="text-xs text-diff-neutral font-mono">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
 
-            {/* Breakdown */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-              transition={{ delay: 0.2 }}
-              className="pt-4"
-            >
-              <div className="text-xs text-diff-neutral font-mono mb-2 px-6">
-                This year, you added:
-              </div>
-              <div className="space-y-1">
-                {stats.map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -4 }}
-                    transition={{ delay: 0.25 + index * 0.05 }}
-                  >
-                    <DiffLine type="addition" lineNumber={3 + index} showGutter={false}>
-                      <span className="inline-flex items-center gap-2">
-                        <span>{stat.icon}</span>
-                        <span className="font-semibold">{stat.value.toLocaleString()}</span>
-                        <span className="text-diff-neutral">{stat.label}</span>
-                      </span>
-                    </DiffLine>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Heatmap Section */}
+          {/* Heatmap Section - Simplified */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
             transition={{ delay: 0.5 }}
-            className="px-6 py-6 border-t border-diff-border"
+            className="px-6 py-6"
           >
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-foreground mb-1 font-mono">
-                Contribution Activity
+            <div className="mb-3">
+              <h3 className="text-xs text-diff-neutral font-mono uppercase tracking-wider">
+                Activity Heatmap
               </h3>
-              <p className="text-xs text-diff-neutral font-mono">
-                {year} activity visualization
-              </p>
             </div>
             <ContributionHeatmap
               totalContributions={contributions.total}
@@ -111,8 +105,8 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-            transition={{ delay: 0.7 }}
-            className="px-6 pb-6"
+            transition={{ delay: 0.6 }}
+            className="px-6 pb-6 border-t border-diff-border pt-4"
           >
             <ReviewComment author="github-wrapped-bot" timestamp="just now">
               {contributions.total > 500

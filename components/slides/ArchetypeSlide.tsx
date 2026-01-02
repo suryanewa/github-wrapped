@@ -47,16 +47,13 @@ export function ArchetypeSlide({ data, isActive }: SlideProps) {
         <FileHeader filename="developer-archetype.ts" type="file" status="added" />
 
         <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg">
-          {/* Language badge */}
+          {/* Header with rarity */}
           <div className="px-6 py-3 border-b border-diff-border flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <StatusBadge status="neutral" label="TypeScript" icon={false} />
-              <span className="text-xs text-diff-neutral font-mono">
-                Interface definition
-              </span>
+              <StatusBadge status="neutral" label="Developer Classification" icon={false} />
             </div>
             <div className={cn(
-              'px-2 py-1 rounded text-xs font-mono font-semibold',
+              'px-3 py-1 rounded text-xs font-mono font-semibold uppercase tracking-wider',
               config.color,
               config.bg
             )}>
@@ -64,109 +61,65 @@ export function ArchetypeSlide({ data, isActive }: SlideProps) {
             </div>
           </div>
 
-          {/* Code Editor View */}
-          <div className="relative">
-            {/* Line numbers gutter */}
-            <div className="absolute left-0 top-0 bottom-0 w-12 bg-diff-gutter border-r border-diff-border flex flex-col font-mono text-xs text-diff-gutter-text text-right pr-3 py-4 select-none">
-              {codeLines.map((_, i) => (
-                <div key={i} className="leading-relaxed h-6">
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-
-            {/* Code content */}
-            <div className="pl-14 pr-6 py-4 font-mono text-sm">
-              {codeLines.map((line, index) => {
-                const getColorClass = (type: string) => {
-                  switch (type) {
-                    case 'keyword': return 'text-diff-keyword';
-                    case 'function': return 'text-diff-function';
-                    case 'string': return 'text-diff-string';
-                    case 'comment': return 'text-diff-comment';
-                    default: return 'text-foreground';
-                  }
-                };
-
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{
-                      opacity: isActive ? 1 : 0,
-                      x: isActive ? 0 : -8
-                    }}
-                    transition={{
-                      delay: 0.1 + index * 0.05,
-                      duration: 0.2,
-                      ease: 'easeOut'
-                    }}
-                    className="leading-relaxed h-6"
-                  >
-                    <span className={getColorClass(line.type)}>
-                      {line.text}
-                    </span>
-                    {index === codeLines.length - 1 && (
-                      <motion.span
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{
-                          delay: 0.1 + codeLines.length * 0.05,
-                          duration: 1,
-                          repeat: Infinity,
-                          repeatDelay: 0.5
-                        }}
-                        className="inline-block w-2 h-4 bg-foreground ml-1 align-middle"
-                      />
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Archetype Details */}
+          {/* HERO - Archetype Name */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.8 }}
-            className="px-6 py-6 border-t border-diff-border"
+            transition={{ delay: 0.1 }}
+            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
           >
-            <div className="space-y-4">
-              {/* Name & Rarity */}
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-2xl font-bold text-foreground font-mono">
-                    {archetype.name}
-                  </h3>
-                  <div className={cn(
-                    'px-2 py-1 rounded text-xs font-mono font-semibold',
-                    config.color,
-                    config.bg
-                  )}>
-                    {config.label}
-                  </div>
-                </div>
-                <p className="text-foreground/80 font-mono text-sm leading-relaxed">
-                  {archetype.description}
-                </p>
-              </div>
+            <div className="text-xs text-diff-neutral font-mono mb-4 uppercase tracking-wider">
+              Your Developer Archetype
+            </div>
+            <motion.h2
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+              className={cn(
+                "text-5xl md:text-6xl font-bold font-mono mb-4",
+                config.color
+              )}
+            >
+              {archetype.name}
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-foreground/90 font-mono text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
+            >
+              {archetype.description}
+            </motion.p>
+          </motion.div>
 
-              {/* Behavioral Traits */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-diff-bg border border-diff-border rounded p-3">
-                  <div className="text-xs text-diff-neutral font-mono mb-1">Pattern</div>
-                  <div className="text-sm text-foreground font-mono">
-                    {archetype.rarity === 'legendary' ? 'Exceptional' :
-                     archetype.rarity === 'rare' ? 'Distinctive' :
-                     archetype.rarity === 'uncommon' ? 'Notable' : 'Consistent'}
-                  </div>
+          {/* Supporting Details - Simplified */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
+            transition={{ delay: 0.5 }}
+            className="px-6 py-6"
+          >
+            <div className="grid grid-cols-3 gap-3 max-w-xl mx-auto">
+              <div className="bg-diff-bg border border-diff-border rounded p-4 text-center">
+                <div className="text-xs text-diff-neutral font-mono mb-2">Rarity</div>
+                <div className={cn("text-lg font-bold font-mono", config.color)}>
+                  {config.label}
                 </div>
-                <div className="bg-diff-bg border border-diff-border rounded p-3">
-                  <div className="text-xs text-diff-neutral font-mono mb-1">Classification</div>
-                  <div className="text-sm text-foreground font-mono">
-                    {archetype.rarity.charAt(0).toUpperCase() + archetype.rarity.slice(1)}
-                  </div>
+              </div>
+              <div className="bg-diff-bg border border-diff-border rounded p-4 text-center">
+                <div className="text-xs text-diff-neutral font-mono mb-2">Pattern</div>
+                <div className="text-lg font-bold font-mono text-foreground">
+                  {archetype.rarity === 'legendary' ? 'Exceptional' :
+                   archetype.rarity === 'rare' ? 'Distinctive' :
+                   archetype.rarity === 'uncommon' ? 'Notable' : 'Consistent'}
+                </div>
+              </div>
+              <div className="bg-diff-bg border border-diff-border rounded p-4 text-center">
+                <div className="text-xs text-diff-neutral font-mono mb-2">Prevalence</div>
+                <div className="text-lg font-bold font-mono text-foreground">
+                  {archetype.rarity === 'legendary' ? '<5%' :
+                   archetype.rarity === 'rare' ? '<15%' :
+                   archetype.rarity === 'uncommon' ? '<35%' : '~50%'}
                 </div>
               </div>
             </div>
