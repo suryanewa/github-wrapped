@@ -84,83 +84,75 @@ export function RhythmSlide({ data, isActive }: SlideProps) {
             </div>
           </div>
 
-          {/* Activity Timeline - Hourly */}
+          {/* HERO - Peak Hour */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
             transition={{ delay: 0.1 }}
-            className="px-6 py-6 border-b border-diff-border"
+            className="px-6 pt-12 pb-8 text-center border-b border-diff-border"
           >
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold text-foreground mb-1 font-mono">
-                24-Hour Activity Pattern
-              </h3>
-              <p className="text-xs text-diff-neutral font-mono">
-                Peak: {formatHour(rhythm.peakHour)} ({getTimeOfDayLabel(rhythm.peakHour)})
-              </p>
+            <div className="text-xs text-diff-neutral font-mono mb-4 uppercase tracking-wider">
+              Peak Coding Time
             </div>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="text-7xl md:text-8xl font-bold font-mono text-diff-addition mb-4"
+            >
+              {formatHour(rhythm.peakHour)}
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-lg text-diff-neutral font-mono mb-6"
+            >
+              {getTimeOfDayLabel(rhythm.peakHour)} developer
+            </motion.div>
 
-            {/* Hour labels and bars */}
-            <div className="space-y-1">
-              {hourlyActivity.map((activity, hour) => {
-                const isPeak = hour === rhythm.peakHour;
-                const height = (activity / maxActivity) * 100;
-
-                return (
-                  <motion.div
-                    key={hour}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -10 }}
-                    transition={{ delay: 0.15 + hour * 0.015 }}
-                    className="flex items-center gap-2 group"
-                  >
-                    <span className={cn(
-                      'text-xs font-mono w-12 text-right',
-                      isPeak ? 'text-diff-addition font-bold' : 'text-diff-neutral'
-                    )}>
-                      {formatHour(hour)}
-                    </span>
-                    <div className="flex-1 bg-diff-gutter rounded-sm h-4 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive ? `${height}%` : 0 }}
-                        transition={{
-                          delay: 0.2 + hour * 0.015,
-                          duration: 0.4,
-                          ease: 'easeOut'
-                        }}
-                        className={cn(
-                          'h-full transition-colors',
-                          isPeak ? 'bg-diff-addition' : 'bg-diff-comment/60 group-hover:bg-diff-comment'
-                        )}
-                      />
-                    </div>
-                    {isPeak && (
-                      <span className="text-xs font-mono text-diff-addition">←</span>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
+            {/* Key stats below */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.4 }}
+              className="grid grid-cols-3 gap-4 max-w-xl mx-auto"
+            >
+              <div>
+                <div className="text-3xl font-bold font-mono text-diff-comment mb-1">
+                  {uniqueDays}
+                </div>
+                <div className="text-xs text-diff-neutral font-mono">active days</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold font-mono text-diff-highlight mb-1">
+                  {rhythm.longestStreak}
+                </div>
+                <div className="text-xs text-diff-neutral font-mono">day streak</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold font-mono text-foreground mb-1">
+                  {weekendPercentage}%
+                </div>
+                <div className="text-xs text-diff-neutral font-mono">weekends</div>
+              </div>
+            </motion.div>
           </motion.div>
 
-          {/* Activity Timeline - Weekly */}
+          {/* Weekly Pattern - Simplified */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
             transition={{ delay: 0.5 }}
-            className="px-6 py-6 border-b border-diff-border"
+            className="px-6 py-6"
           >
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-foreground mb-1 font-mono">
-                Weekly Distribution
+              <h3 className="text-xs text-diff-neutral font-mono uppercase tracking-wider">
+                Weekly Pattern
               </h3>
-              <p className="text-xs text-diff-neutral font-mono">
-                Most active: {rhythm.peakDay} • Weekend work: {weekendPercentage}%
-              </p>
             </div>
 
-            <div className="flex items-end gap-2 h-32">
+            <div className="flex items-end gap-2 h-24 max-w-xl mx-auto">
               {daysOfWeek.map((day, index) => {
                 const activity = weeklyActivity[index];
                 const height = (activity / maxWeeklyActivity) * 100;
@@ -200,41 +192,12 @@ export function RhythmSlide({ data, isActive }: SlideProps) {
             </div>
           </motion.div>
 
-          {/* Stats Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.8 }}
-            className="px-6 py-6 border-b border-diff-border"
-          >
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-diff-bg border border-diff-border rounded p-3">
-                <div className="text-xs text-diff-neutral font-mono mb-1">Longest Streak</div>
-                <div className="text-lg text-diff-highlight font-mono font-bold">
-                  {rhythm.longestStreak}d
-                </div>
-              </div>
-              <div className="bg-diff-bg border border-diff-border rounded p-3">
-                <div className="text-xs text-diff-neutral font-mono mb-1">Active Days</div>
-                <div className="text-lg text-diff-addition font-mono font-bold">
-                  {uniqueDays}
-                </div>
-              </div>
-              <div className="bg-diff-bg border border-diff-border rounded p-3">
-                <div className="text-xs text-diff-neutral font-mono mb-1">Weekend %</div>
-                <div className="text-lg text-diff-comment font-mono font-bold">
-                  {weekendPercentage}%
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
           {/* Review Comment */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-            transition={{ delay: 1 }}
-            className="px-6 pb-6 pt-4"
+            transition={{ delay: 0.7 }}
+            className="px-6 pb-6 pt-4 border-t border-diff-border"
           >
             <ReviewComment author="github-wrapped-bot" timestamp="just now">
               {rhythm.peakHour >= 22 || rhythm.peakHour <= 4
