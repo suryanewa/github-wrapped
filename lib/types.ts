@@ -41,6 +41,12 @@ export interface WrappedData {
     forksEarned: number;
     topStarredRepo: string;
   };
+  collaboration: {
+    externalRepos: number;
+    diverseProjects: boolean;
+    workStyle: 'lone_wolf' | 'team_player' | 'community_builder';
+    uniqueDays: number;
+  };
 }
 
 export interface SlideProps {

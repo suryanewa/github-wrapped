@@ -5,7 +5,7 @@ import { FileHeader, DiffLine, MetricBadge, ReviewComment } from '@/components/p
 import { SlideProps } from '@/lib/types';
 
 export function RhythmSlide({ data }: SlideProps) {
-  const { rhythm } = data;
+  const { rhythm, collaboration } = data;
 
   const formatHour = (hour: number): string => {
     if (hour === 0) return '12:00 AM';
@@ -90,12 +90,36 @@ export function RhythmSlide({ data }: SlideProps) {
               </div>
             </motion.div>
 
-            {/* Grid: Weekend Ratio + Longest Streak */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Grid: Days Active + Weekend Ratio + Longest Streak */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
+                className="bg-diff-bg rounded-lg p-5 border border-diff-neutral/20"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">📆</span>
+                  <span className="font-mono text-sm text-diff-neutral">Days Active</span>
+                </div>
+                <div className="font-mono text-2xl text-diff-addition font-bold">
+                  {collaboration.uniqueDays}
+                </div>
+                <div className="text-sm text-diff-neutral mt-1">
+                  {collaboration.uniqueDays > 200
+                    ? 'Highly consistent'
+                    : collaboration.uniqueDays > 100
+                    ? 'Regular contributor'
+                    : collaboration.uniqueDays > 50
+                    ? 'Active developer'
+                    : 'Building momentum'}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
                 className="bg-diff-bg rounded-lg p-5 border border-diff-neutral/20"
               >
                 <div className="flex items-center gap-2 mb-2">

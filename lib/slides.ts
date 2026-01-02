@@ -6,6 +6,7 @@ import {
   RepositoriesSlide,
   LanguagesSlide,
   RhythmSlide,
+  CollaborationSlide,
   ImpactSlide,
   SummarySlide,
 } from '@/components/slides';
@@ -39,6 +40,11 @@ export const SLIDE_DECK: Slide[] = [
     id: 'rhythm',
     component: RhythmSlide,
     file: 'coding-patterns.log',
+  },
+  {
+    id: 'collaboration',
+    component: CollaborationSlide,
+    file: 'collaboration-signal.md',
   },
   {
     id: 'impact',

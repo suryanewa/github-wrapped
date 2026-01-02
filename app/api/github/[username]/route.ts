@@ -13,6 +13,7 @@ import {
   analyzeLanguages,
   analyzeRhythm,
   analyzeImpact,
+  analyzeCollaboration,
 } from '@/lib/computation/analysis';
 import { calculateArchetype } from '@/lib/computation/archetype';
 import { WrappedData } from '@/lib/types';
@@ -68,6 +69,9 @@ export async function GET(
     // Calculate impact
     const impact = analyzeImpact(repos);
 
+    // Analyze collaboration
+    const collaboration = analyzeCollaboration(eventsToAnalyze, username);
+
     // Build archetype input
     const eventsByHour: Record<number, number> = {};
     const eventsByDay: Record<string, number> = {};
@@ -109,6 +113,7 @@ export async function GET(
       languages,
       rhythm,
       impact,
+      collaboration,
     };
 
     return NextResponse.json(wrappedData, {

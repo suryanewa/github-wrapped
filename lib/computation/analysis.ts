@@ -268,3 +268,54 @@ export function analyzeImpact(repos: Repo[]): {
     topStarredRepo: topRepo.name,
   };
 }
+
+/**
+ * Analyze collaboration patterns
+ */
+export function analyzeCollaboration(
+  events: Event[],
+  username: string
+): {
+  externalRepos: number;
+  diverseProjects: boolean;
+  workStyle: 'lone_wolf' | 'team_player' | 'community_builder';
+  uniqueDays: number;
+} {
+  const externalRepoSet = new Set<string>();
+  const uniqueDaysSet = new Set<string>();
+
+  // Find repos that don't belong to the user (external contributions)
+  for (const event of events) {
+    const repoOwner = event.repo.name.split('/')[0];
+
+    // Count unique days
+    const dateStr = event.created_at.split('T')[0];
+    uniqueDaysSet.add(dateStr);
+
+    // Track external repos (not owned by user)
+    if (repoOwner.toLowerCase() !== username.toLowerCase()) {
+      externalRepoSet.add(event.repo.name);
+    }
+  }
+
+  const externalRepos = externalRepoSet.size;
+  const diverseProjects = externalRepos > 3;
+  const uniqueDays = uniqueDaysSet.size;
+
+  // Determine work style
+  let workStyle: 'lone_wolf' | 'team_player' | 'community_builder';
+  if (externalRepos === 0) {
+    workStyle = 'lone_wolf';
+  } else if (externalRepos < 5) {
+    workStyle = 'team_player';
+  } else {
+    workStyle = 'community_builder';
+  }
+
+  return {
+    externalRepos,
+    diverseProjects,
+    workStyle,
+    uniqueDays,
+  };
+}
