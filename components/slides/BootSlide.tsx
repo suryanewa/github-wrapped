@@ -62,7 +62,7 @@ export function BootSlide({ data, isActive }: SlideProps) {
             <div className="w-3 h-3 rounded-full bg-diff-success" />
           </div>
           <div className="flex-1 text-center font-mono text-xs text-diff-neutral">
-            {data.username}@github-wrapped: ~/year-in-review-{data.year}
+            {data.username}@github-wrapped: ~/github-wrapped-2025
           </div>
         </div>
 

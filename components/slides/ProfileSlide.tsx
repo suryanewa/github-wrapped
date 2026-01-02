@@ -16,7 +16,7 @@ export function ProfileSlide({ data, isActive }: SlideProps) {
     >
       <div className="max-w-4xl">
         <FileHeader
-          filename={`${username}/${year}-year-in-review.md`}
+          filename={`${username}/github-wrapped-2025.md`}
           type="review"
           status="modified"
         />

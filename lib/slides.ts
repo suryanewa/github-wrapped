@@ -20,7 +20,7 @@ export const SLIDE_DECK: Slide[] = [
   {
     id: 'profile',
     component: ProfileSlide,
-    file: '2025-year-in-review.pr',
+    file: 'github-wrapped-2025.pr',
   },
   {
     id: 'contributions',

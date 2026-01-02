@@ -78,7 +78,7 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
               </svg>
               <span className="text-diff-neutral">{data.username}</span>
               <span className="text-diff-neutral-subtle">/</span>
-              <span className="text-diff-neutral">year-in-review-{data.year}</span>
+              <span className="text-diff-neutral">github-wrapped-2025</span>
               <span className="text-diff-neutral-subtle">/</span>
               <span className="text-foreground">{currentFile}</span>
             </div>

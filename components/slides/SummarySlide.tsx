@@ -63,7 +63,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
             </div>
             <div className="flex-1">
               <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-1">
-                Pull Request: {year} Year in Review
+                Pull Request: GitHub Wrapped 2025
               </h2>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-diff-neutral font-mono text-sm">@{username}</span>

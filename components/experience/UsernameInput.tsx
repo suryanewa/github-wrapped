@@ -42,10 +42,10 @@ export function UsernameInput({ onSubmit, isLoading = false }: UsernameInputProp
         {/* Terminal-style header */}
         <div className="mb-8 space-y-2">
           <DiffLine type="neutral">
-            <span className="text-diff-neutral">$ git clone https://github.com/wrapped/year-in-review.git</span>
+            <span className="text-diff-neutral">$ git clone https://github.com/wrapped/github-wrapped-2025.git</span>
           </DiffLine>
           <DiffLine type="neutral">
-            <span className="text-diff-neutral">Cloning into 'year-in-review'...</span>
+            <span className="text-diff-neutral">Cloning into 'github-wrapped-2025'...</span>
           </DiffLine>
         </div>
 
