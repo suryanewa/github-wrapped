@@ -19,9 +19,9 @@ import { WrappedData } from '@/lib/types';
 
 export async function GET(
   request: Request,
-  { params }: { params: { username: string } }
+  { params }: { params: Promise<{ username: string }> }
 ) {
-  const { username } = params;
+  const { username } = await params;
   const year = new Date().getFullYear();
 
   try {
