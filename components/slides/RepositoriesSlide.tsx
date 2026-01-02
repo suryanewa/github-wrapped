@@ -207,12 +207,12 @@ export function RepositoriesSlide({ data, isActive }: SlideProps) {
               {repositories.length > 10
                 ? `Distributed focus across ${repositories.length} repositories. You balance exploration with depth, maintaining active engagement across diverse projects.`
                 : repositories.length > 5
-                ? `Working across ${repositories.length} repositories demonstrates versatility. ${topRepos[0].name} leads with ${topRepos[0].commits} commits, showing strategic prioritization.`
+                ? `Working across ${repositories.length} repositories demonstrates versatility. ${topRepo.name} leads with ${topRepo.commits} commits, showing strategic prioritization.`
                 : repositories.length > 2
-                ? `Concentrated effort in ${repositories.length} key projects. ${topRepos[0].name} received ${Math.round((topRepos[0].commits / totalCommits) * 100)}% of commits—clear focus drives impact.`
+                ? `Concentrated effort in ${repositories.length} key projects. ${topRepo.name} received ${Math.round((topRepo.commits / totalCommits) * 100)}% of commits—clear focus drives impact.`
                 : repositories.length === 2
-                ? `Dual-repository focus on ${topRepos[0].name} and ${topRepos[1].name}. Parallel development streams enable efficient context switching.`
-                : `Single-repository focus on ${topRepos[0].name} with ${topRepos[0].commits} commits. Depth over breadth accelerates mastery and cumulative progress.`}
+                ? `Dual-repository focus on ${repositories[0].name} and ${repositories[1].name}. Parallel development streams enable efficient context switching.`
+                : `Single-repository focus on ${topRepo.name} with ${topRepo.commits} commits. Depth over breadth accelerates mastery and cumulative progress.`}
             </ReviewComment>
           </motion.div>
         </div>
