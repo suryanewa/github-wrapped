@@ -14,57 +14,20 @@ export default function Home() {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call
-      // For now, use mock data to demonstrate the UI
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await fetch(`/api/github/${username}`);
 
-      const mockData: WrappedData = {
-        username,
-        year: 2025,
-        profile: {
-          name: username,
-          avatarUrl: `https://github.com/${username}.png`,
-          bio: 'Developer',
-          followers: 100,
-        },
-        contributions: {
-          total: 1247,
-          commits: 847,
-          prs: 89,
-          issues: 156,
-          reviews: 155,
-        },
-        archetype: {
-          name: 'Night Owl Architect',
-          description: 'Deep focus, late-night momentum',
-          rarity: 'uncommon',
-        },
-        repositories: [
-          { name: 'my-awesome-project', commits: 234, additions: 5432, deletions: 1234 },
-          { name: 'another-cool-repo', commits: 156, additions: 3210, deletions: 890 },
-        ],
-        languages: [
-          { name: 'TypeScript', percentage: 64, linesWritten: 12453 },
-          { name: 'Python', percentage: 23, linesWritten: 4532 },
-          { name: 'JavaScript', percentage: 13, linesWritten: 2341 },
-        ],
-        rhythm: {
-          peakHour: 23,
-          peakDay: 'Tuesday',
-          weekendRatio: 0.25,
-          longestStreak: 42,
-        },
-        impact: {
-          starsEarned: 234,
-          forksEarned: 45,
-          topStarredRepo: 'my-awesome-project',
-        },
-      };
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch GitHub data');
+      }
 
-      setWrappedData(mockData);
+      const data: WrappedData = await response.json();
+
+      setWrappedData(data);
       setStage('experience');
     } catch (error) {
       console.error('Failed to fetch wrapped data:', error);
+      alert(error instanceof Error ? error.message : 'Failed to fetch GitHub data. Please try again.');
     } finally {
       setIsLoading(false);
     }
