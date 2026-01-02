@@ -121,6 +121,32 @@
   --diff-warning: #d29922;
   --diff-error: #f85149;
   --diff-info: #58a6ff;
+
+  /* Premium Effects - Apple-inspired */
+  --glow-addition: rgba(63, 185, 80, 0.4);
+  --glow-comment: rgba(88, 166, 255, 0.3);
+  --glow-highlight: rgba(240, 136, 62, 0.35);
+
+  /* Glass Morphism */
+  --glass-surface: rgba(22, 27, 34, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shine: rgba(255, 255, 255, 0.05);
+
+  /* Depth Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-glow-green: 0 0 20px rgba(63, 185, 80, 0.2), 0 0 40px rgba(63, 185, 80, 0.1);
+  --shadow-glow-blue: 0 0 20px rgba(88, 166, 255, 0.2), 0 0 40px rgba(88, 166, 255, 0.1);
+
+  /* Refined Spacing Scale - Golden Ratio */
+  --space-xs: 0.5rem;    /* 8px */
+  --space-sm: 0.75rem;   /* 12px */
+  --space-md: 1.25rem;   /* 20px */
+  --space-lg: 2rem;      /* 32px */
+  --space-xl: 3.25rem;   /* 52px */
+  --space-2xl: 5.25rem;  /* 84px */
+  --space-3xl: 8.5rem;   /* 136px */
 }
 
 .dark {
@@ -310,5 +336,149 @@
 
   .animate-fade-in-up {
     animation: fade-in-up 0.4s ease-out forwards;
+  }
+
+  /* Premium Glow Effects */
+  .glow-green {
+    box-shadow: var(--shadow-glow-green);
+  }
+
+  .glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+  }
+
+  .text-glow-green {
+    text-shadow:
+      0 0 20px var(--glow-addition),
+      0 0 40px var(--glow-addition),
+      0 0 60px rgba(63, 185, 80, 0.1);
+  }
+
+  .text-glow-blue {
+    text-shadow:
+      0 0 20px var(--glow-comment),
+      0 0 40px var(--glow-comment),
+      0 0 60px rgba(88, 166, 255, 0.1);
+  }
+
+  /* Glass Morphism */
+  .glass-panel {
+    background: var(--glass-surface);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-md),
+                inset 0 1px 0 0 var(--glass-shine);
+  }
+
+  /* Premium Animations - Orchestrated */
+  @keyframes hero-enter {
+    0% {
+      opacity: 0;
+      transform: scale(0.92) translateY(8px);
+      filter: blur(4px);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.02) translateY(-2px);
+      filter: blur(0px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0px);
+    }
+  }
+
+  .animate-hero-enter {
+    animation: hero-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes number-reveal {
+    0% {
+      opacity: 0;
+      transform: scale(0.8);
+      filter: blur(8px);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+      filter: blur(2px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+
+  .animate-number-reveal {
+    animation: number-reveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes subtle-float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  .animate-subtle-float {
+    animation: subtle-float 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      transparent 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 8s linear infinite;
+  }
+
+  /* Refined Typography Utilities */
+  .text-display {
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  .text-body-refined {
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+  }
+
+  .text-mono-tight {
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+  }
+
+  /* Hover Transitions - Apple Quality */
+  .hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Focus Visible - Premium */
+  .focus-premium:focus-visible {
+    outline: 2px solid var(--diff-comment);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }

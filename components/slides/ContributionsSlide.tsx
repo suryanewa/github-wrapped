@@ -31,51 +31,102 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
             @@ {year} Activity Summary @@
           </div>
 
-          {/* HERO NUMBER - Make it unmissable */}
+          {/* HERO NUMBER - Cinematic Reveal */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-            transition={{ delay: 0.1 }}
-            className="px-6 pt-8 pb-6 text-center border-b border-diff-border"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="px-6 pt-12 pb-10 text-center border-b border-diff-border relative overflow-hidden"
           >
-            <div className="text-xs text-diff-neutral font-mono mb-2 uppercase tracking-wider">
-              Total Contributions
-            </div>
+            {/* Subtle background shimmer */}
+            <div className="absolute inset-0 animate-shimmer" />
+
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: isActive ? 1 : 0.9, opacity: isActive ? 1 : 0 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="text-7xl md:text-8xl font-bold font-mono text-diff-addition mb-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="text-[10px] text-diff-neutral/60 font-mono mb-3 uppercase tracking-[0.2em] font-medium"
             >
-              {contributions.total.toLocaleString()}
+              Total Contributions
             </motion.div>
-            <div className="text-sm text-diff-neutral font-mono">
+
+            {/* Hero Number with Glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, filter: "blur(10px)" }}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                scale: isActive ? 1 : 0.85,
+                filter: isActive ? "blur(0px)" : "blur(10px)"
+              }}
+              transition={{
+                delay: 0.25,
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1]
+              }}
+              className="relative inline-block"
+            >
+              <div className="text-8xl md:text-9xl font-bold font-mono text-diff-addition text-display text-glow-green mb-4 relative z-10">
+                {contributions.total.toLocaleString()}
+              </div>
+              {/* Glow layer */}
+              <div className="absolute inset-0 blur-2xl bg-diff-addition/20 scale-110" />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="text-sm text-diff-neutral font-mono text-body-refined max-w-md mx-auto"
+            >
               commits pushed, PRs opened, issues engaged in {year}
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Breakdown - Cleaner grid layout */}
+          {/* Breakdown - Glass Morphism Cards */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-            transition={{ delay: 0.3 }}
-            className="px-6 py-6 border-b border-diff-border"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            className="px-6 py-8 border-b border-diff-border"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-                  transition={{ delay: 0.35 + index * 0.05 }}
-                  className="bg-diff-bg border border-diff-border rounded p-3 text-center"
+                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    y: isActive ? 0 : 15,
+                    scale: isActive ? 1 : 0.95
+                  }}
+                  transition={{
+                    delay: 0.65 + index * 0.08,
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                  className="glass-panel rounded-lg p-4 text-center group hover-lift cursor-default relative overflow-hidden"
                 >
-                  <div className="text-xl mb-1">{stat.icon}</div>
-                  <div className="text-2xl font-bold font-mono text-diff-addition mb-1">
-                    {stat.value.toLocaleString()}
-                  </div>
-                  <div className="text-xs text-diff-neutral font-mono">
-                    {stat.label}
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-diff-addition/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="relative z-10">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{
+                        scale: isActive ? 1 : 0.8,
+                        opacity: isActive ? 1 : 0
+                      }}
+                      transition={{ delay: 0.7 + index * 0.08, duration: 0.4 }}
+                      className="text-2xl mb-2 filter drop-shadow-lg"
+                    >
+                      {stat.icon}
+                    </motion.div>
+                    <div className="text-3xl font-bold font-mono text-diff-addition text-display mb-2 group-hover:text-glow-green transition-all duration-300">
+                      {stat.value.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] text-diff-neutral/80 font-mono uppercase tracking-wider text-mono-tight">
+                      {stat.label}
+                    </div>
                   </div>
                 </motion.div>
               ))}
