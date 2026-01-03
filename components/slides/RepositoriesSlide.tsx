@@ -55,9 +55,9 @@ export function RepositoriesSlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  One project dominated your year
+                  Your top repository
                 </div>
-                <div className="mt-4 font-mono text-5xl md:text-6xl leading-tight tracking-tight text-diff-highlight">
+                <div className="mt-4 font-mono text-6xl md:text-7xl leading-tight tracking-tight text-diff-highlight">
                   {topRepo.name}
                 </div>
                 <div className="mt-4 font-mono text-sm text-diff-neutral">

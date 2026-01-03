@@ -54,9 +54,9 @@ export function RhythmSlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  One time your code showed up
+                  Peak hour
                 </div>
-                <div className="mt-4 font-mono text-6xl md:text-7xl leading-none tracking-tight text-diff-addition">
+                <div className="mt-4 font-mono text-7xl md:text-8xl leading-none tracking-tight text-diff-addition">
                   {formatHour(rhythm.peakHour)}
                 </div>
                 <div className="mt-4 font-mono text-sm text-diff-neutral">

@@ -21,7 +21,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
   };
 
   const handleShareTwitter = () => {
-    const text = `My ${year} GitHub Wrapped 🎉\n${contributions.total.toLocaleString()} contributions | ${archetype.name} archetype | ${topLanguage} developer`;
+    const text = `My ${year} GitHub Wrapped: ${contributions.total.toLocaleString()} contributions • ${archetype.name} • ${topLanguage}`;
     const url = `${window.location.origin}?username=${username}`;
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
   };
@@ -48,13 +48,13 @@ export function SummarySlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  Year summary
+                  GitHub Wrapped
                 </div>
-                <div className="mt-4 font-mono text-4xl md:text-5xl leading-tight tracking-tight text-foreground">
+                <div className="mt-4 font-mono text-5xl md:text-6xl leading-tight tracking-tight text-foreground">
                   {archetype.name}.
                 </div>
                 <div className="mt-3 font-mono text-sm text-diff-neutral max-w-xl">
-                  +{contributions.total.toLocaleString()} contributions. Primary: {topLanguage}.
+                  +{contributions.total.toLocaleString()} contributions • {topLanguage}
                 </div>
               </div>
             }
@@ -99,13 +99,13 @@ export function SummarySlide({ data, isActive }: SlideProps) {
           transition={{ delay: 0.5 }}
           className="mt-8 space-y-4"
         >
-          {/* Share Buttons */}
+          {/* Share (Spotify-like: one obvious action) */}
           <div className="flex items-center justify-center gap-3">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleCopyLink}
-              className="flex items-center gap-2 px-4 py-2 bg-diff-surface hover:bg-diff-surface-hover text-foreground border border-diff-border font-mono text-sm rounded transition-colors"
+              className="flex items-center gap-2 px-6 py-2.5 bg-foreground text-diff-bg font-mono text-sm rounded-full transition-colors"
             >
               {copied ? (
                 <>
@@ -120,38 +120,16 @@ export function SummarySlide({ data, isActive }: SlideProps) {
                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" />
                     <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" />
                   </svg>
-                  Copy Link
+                  Share this story
                 </>
               )}
             </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleShareTwitter}
-              className="flex items-center gap-2 px-4 py-2 bg-diff-surface hover:bg-diff-surface-hover text-foreground border border-diff-border font-mono text-sm rounded transition-colors"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-              Share on 𝕏
-            </motion.button>
           </div>
 
-          {/* Keyboard Shortcuts */}
-          <div className="text-center space-y-2">
-            <div className="flex items-center justify-center gap-4 text-diff-neutral font-mono text-xs">
-              <span>
-                Press <kbd className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-diff-neutral">Esc</kbd> to create another
-              </span>
-              <span className="text-diff-neutral/50">•</span>
-              <span>
-                <kbd className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-diff-neutral">?</kbd> for shortcuts
-              </span>
-            </div>
-            <p className="text-diff-neutral/50 font-mono text-xs">
-              Screenshot this card to share your year in code
-            </p>
+          <div className="text-center text-diff-neutral/70 font-mono text-xs">
+            <button onClick={handleShareTwitter} className="underline underline-offset-4 hover:text-foreground transition-colors">
+              Or post to 𝕏
+            </button>
           </div>
         </motion.div>
       </motion.div>

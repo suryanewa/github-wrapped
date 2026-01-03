@@ -40,7 +40,7 @@ export function ProfileSlide({ data, isActive }: SlideProps) {
 
                 <div className="min-w-0">
                   <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                    Reviewing {year}
+                    Profile
                   </div>
                   <div className="mt-2 font-mono text-4xl md:text-5xl leading-tight tracking-tight text-foreground">
                     {profile.name}

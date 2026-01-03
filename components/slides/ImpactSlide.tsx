@@ -45,7 +45,7 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  One way your work reached others
+                  Your impact
                 </div>
                 <div className={`mt-4 font-mono text-6xl md:text-7xl leading-none tracking-tight ${hasImpact ? "text-diff-highlight" : "text-diff-comment"}`}>
                   {primaryLabel}

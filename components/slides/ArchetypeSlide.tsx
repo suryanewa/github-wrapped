@@ -35,9 +35,9 @@ export function ArchetypeSlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  One thing your year looked like
+                  Your archetype
                 </div>
-                <div className={`mt-4 font-mono text-5xl md:text-6xl leading-tight tracking-tight ${config.color}`}>
+                <div className={`mt-4 font-mono text-6xl md:text-7xl leading-tight tracking-tight ${config.color}`}>
                   {archetype.name}
                 </div>
                 <div className="mt-4 font-mono text-sm text-diff-neutral max-w-2xl">

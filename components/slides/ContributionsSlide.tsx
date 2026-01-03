@@ -34,13 +34,13 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  One thing you did this year
+                  You shipped.
                 </div>
-                <div className="mt-4 font-mono text-6xl md:text-7xl leading-none tracking-tight text-diff-addition">
+                <div className="mt-4 font-mono text-7xl md:text-8xl leading-none tracking-tight text-diff-addition">
                   +{contributions.total.toLocaleString()}
                 </div>
                 <div className="mt-4 font-mono text-sm text-diff-neutral">
-                  contributions shipped in {year}.
+                  contributions in {year}.
                 </div>
               </div>
             }
@@ -56,7 +56,7 @@ export function ContributionsSlide({ data, isActive }: SlideProps) {
           >
             <div className="border-t border-diff-border pt-6">
               <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em] mb-3">
-                Activity (annotation)
+                Activity map
               </div>
               <ContributionHeatmap
                 totalContributions={contributions.total}

@@ -55,13 +55,13 @@ export function LanguagesSlide({ data, isActive }: SlideProps) {
             primary={
               <div className="py-6 md:py-10">
                 <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
-                  One thing you wrote in
+                  Your top language
                 </div>
-                <div className="mt-4 font-mono text-6xl md:text-7xl leading-none tracking-tight text-diff-comment">
+                <div className="mt-4 font-mono text-7xl md:text-8xl leading-none tracking-tight text-diff-comment">
                   {primaryLang.name}
                 </div>
                 <div className="mt-4 font-mono text-sm text-diff-neutral">
-                  {primaryLang.percentage}% of your year’s code.
+                  {primaryLang.percentage}% of your year.
                 </div>
               </div>
             }
@@ -70,7 +70,7 @@ export function LanguagesSlide({ data, isActive }: SlideProps) {
                 <div className="space-y-1">
                   {secondaryLangs.map((lang, i) => (
                     <DiffLine key={lang.name} type="neutral" lineNumber={30 + i}>
-                      {lang.name}: {lang.percentage}% ({lang.linesWritten.toLocaleString()} lines)
+                      {i + 2}. {lang.name} — {lang.percentage}% ({lang.linesWritten.toLocaleString()} lines)
                     </DiffLine>
                   ))}
                   {languages.length > 4 && (
