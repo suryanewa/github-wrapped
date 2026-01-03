@@ -12,7 +12,6 @@ interface ExperienceControllerProps {
 
 export function ExperienceController({ data, onExit }: ExperienceControllerProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [headerSlide, setHeaderSlide] = useState(0);
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
   const [direction, setDirection] = useState(1);
   const totalSlides = SLIDE_DECK.length;
@@ -67,10 +66,10 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
   // Each slide should read like a fresh document; reset scroll on slide change.
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
-  }, [headerSlide]);
+  }, [currentSlide]);
 
-  const currentFile = SLIDE_DECK[headerSlide].file || 'slide.tsx';
-  const progress = ((headerSlide + 1) / totalSlides) * 100;
+  const currentFile = SLIDE_DECK[currentSlide].file || 'slide.tsx';
+  const progress = ((currentSlide + 1) / totalSlides) * 100;
 
   return (
     <div className="min-h-screen flex flex-col bg-diff-bg relative">
@@ -163,9 +162,8 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
       <div ref={scrollRef} className="flex-1 overflow-auto">
         <div className="max-w-5xl mx-auto px-6 py-10">
           <AnimatePresence
-            mode="wait"
+            mode="sync"
             custom={direction}
-            onExitComplete={() => setHeaderSlide(currentSlide)}
           >
             <motion.div
               key={currentSlide}
