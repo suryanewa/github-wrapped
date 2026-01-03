@@ -53,6 +53,11 @@ export default function Home() {
     const username = new URLSearchParams(window.location.search).get('username');
     if (!username) return;
 
+    // In dev, React strict-mode may mount/unmount and re-run effects; avoid duplicate auto-fetches.
+    const w = window as unknown as { __gw_autostart_username?: string };
+    if (w.__gw_autostart_username === username) return;
+    w.__gw_autostart_username = username;
+
     hasAutoStartedFromUrl.current = true;
     handleUsernameSubmit(username);
   }, [stage, isLoading]);

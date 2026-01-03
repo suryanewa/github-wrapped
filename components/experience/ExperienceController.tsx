@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { WrappedData } from '@/lib/types';
 import { SLIDE_DECK } from '@/lib/slides';
@@ -15,6 +15,7 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
   const [direction, setDirection] = useState(1);
   const totalSlides = SLIDE_DECK.length;
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const nextSlide = useCallback(() => {
     if (currentSlide < totalSlides - 1) {
@@ -61,6 +62,11 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nextSlide, prevSlide, onExit]);
+
+  // Each slide should read like a fresh document; reset scroll on slide change.
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [currentSlide]);
 
   const currentFile = SLIDE_DECK[currentSlide].file || 'slide.tsx';
   const progress = ((currentSlide + 1) / totalSlides) * 100;
@@ -153,7 +159,7 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-auto">
+      <div ref={scrollRef} className="flex-1 overflow-auto">
         <div className="max-w-5xl mx-auto px-6 py-10">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
