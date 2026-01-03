@@ -12,27 +12,25 @@ interface ExperienceControllerProps {
 
 export function ExperienceController({ data, onExit }: ExperienceControllerProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [pendingSlide, setPendingSlide] = useState<number | null>(null);
+  const [headerSlide, setHeaderSlide] = useState(0);
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
   const [direction, setDirection] = useState(1);
   const totalSlides = SLIDE_DECK.length;
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const nextSlide = useCallback(() => {
-    if (pendingSlide !== null) return;
     if (currentSlide < totalSlides - 1) {
       setDirection(1);
-      setPendingSlide(currentSlide + 1);
+      setCurrentSlide(prev => prev + 1);
     }
-  }, [currentSlide, pendingSlide, totalSlides]);
+  }, [currentSlide, totalSlides]);
 
   const prevSlide = useCallback(() => {
-    if (pendingSlide !== null) return;
     if (currentSlide > 0) {
       setDirection(-1);
-      setPendingSlide(currentSlide - 1);
+      setCurrentSlide(prev => prev - 1);
     }
-  }, [currentSlide, pendingSlide]);
+  }, [currentSlide]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -69,10 +67,10 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
   // Each slide should read like a fresh document; reset scroll on slide change.
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
-  }, [currentSlide]);
+  }, [headerSlide]);
 
-  const currentFile = SLIDE_DECK[currentSlide].file || 'slide.tsx';
-  const progress = ((currentSlide + 1) / totalSlides) * 100;
+  const currentFile = SLIDE_DECK[headerSlide].file || 'slide.tsx';
+  const progress = ((headerSlide + 1) / totalSlides) * 100;
 
   return (
     <div className="min-h-screen flex flex-col bg-diff-bg relative">
@@ -167,15 +165,10 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
           <AnimatePresence
             mode="wait"
             custom={direction}
-            onExitComplete={() => {
-              if (pendingSlide !== null) {
-                setCurrentSlide(pendingSlide);
-                setPendingSlide(null);
-              }
-            }}
+            onExitComplete={() => setHeaderSlide(currentSlide)}
           >
             <motion.div
-              key={pendingSlide ?? currentSlide}
+              key={currentSlide}
               custom={direction}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -186,7 +179,7 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
               }}
             >
               {(() => {
-                const slide = SLIDE_DECK[pendingSlide ?? currentSlide];
+                const slide = SLIDE_DECK[currentSlide];
                 const SlideComponent = slide.component;
                 return <SlideComponent data={data} isActive={true} />;
               })()}
