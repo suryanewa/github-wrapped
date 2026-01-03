@@ -12,24 +12,27 @@ interface ExperienceControllerProps {
 
 export function ExperienceController({ data, onExit }: ExperienceControllerProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [pendingSlide, setPendingSlide] = useState<number | null>(null);
   const [showKeyboardHints, setShowKeyboardHints] = useState(false);
   const [direction, setDirection] = useState(1);
   const totalSlides = SLIDE_DECK.length;
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const nextSlide = useCallback(() => {
+    if (pendingSlide !== null) return;
     if (currentSlide < totalSlides - 1) {
       setDirection(1);
-      setCurrentSlide(prev => prev + 1);
+      setPendingSlide(currentSlide + 1);
     }
-  }, [currentSlide, totalSlides]);
+  }, [currentSlide, pendingSlide, totalSlides]);
 
   const prevSlide = useCallback(() => {
+    if (pendingSlide !== null) return;
     if (currentSlide > 0) {
       setDirection(-1);
-      setCurrentSlide(prev => prev - 1);
+      setPendingSlide(currentSlide - 1);
     }
-  }, [currentSlide]);
+  }, [currentSlide, pendingSlide]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -161,9 +164,18 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
       {/* Main Content Area */}
       <div ref={scrollRef} className="flex-1 overflow-auto">
         <div className="max-w-5xl mx-auto px-6 py-10">
-          <AnimatePresence mode="wait" custom={direction}>
+          <AnimatePresence
+            mode="wait"
+            custom={direction}
+            onExitComplete={() => {
+              if (pendingSlide !== null) {
+                setCurrentSlide(pendingSlide);
+                setPendingSlide(null);
+              }
+            }}
+          >
             <motion.div
-              key={currentSlide}
+              key={pendingSlide ?? currentSlide}
               custom={direction}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -174,7 +186,7 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
               }}
             >
               {(() => {
-                const slide = SLIDE_DECK[currentSlide];
+                const slide = SLIDE_DECK[pendingSlide ?? currentSlide];
                 const SlideComponent = slide.component;
                 return <SlideComponent data={data} isActive={true} />;
               })()}

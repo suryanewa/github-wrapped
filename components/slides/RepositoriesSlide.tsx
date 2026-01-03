@@ -16,10 +16,38 @@ export function RepositoriesSlide({ data, isActive }: SlideProps) {
       >
         <div className="max-w-4xl">
           <FileHeader filename="repositories.diff" type="diff" status="modified" />
-          <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg p-6">
-            <p className="text-diff-neutral font-mono">
-              No repository activity detected this year.
-            </p>
+          <div className="bg-diff-surface border-x border-b border-diff-border rounded-b-lg">
+            <div className="px-6 py-3 bg-diff-bg border-b border-diff-border font-mono text-xs text-diff-neutral">
+              @@ top-repositories.md @@
+            </div>
+            <SlideDocument
+              isActive={isActive}
+              primary={
+                <div className="py-6 md:py-10">
+                  <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                    No repositories
+                  </div>
+                  <div className="mt-4 font-mono text-7xl md:text-8xl leading-none tracking-tight text-foreground">
+                    0
+                  </div>
+                  <div className="mt-4 font-mono text-sm text-diff-neutral">
+                    public repos detected this year.
+                  </div>
+                </div>
+              }
+              secondary={
+                <div className="space-y-1">
+                  <DiffLine type="neutral" lineNumber={1}>
+                    hint: try a username with public repositories
+                  </DiffLine>
+                </div>
+              }
+              footer={
+                <ReviewComment author="github-wrapped-bot" timestamp="just now">
+                  A quiet repo year can still mean real work — private code, learning, or planning.
+                </ReviewComment>
+              }
+            />
           </div>
         </div>
       </motion.div>
