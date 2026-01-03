@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { UsernameInput } from '@/components/experience/UsernameInput';
 import { ExperienceController } from '@/components/experience/ExperienceController';
 import { WrappedData } from '@/lib/types';
@@ -9,11 +9,16 @@ export default function Home() {
   const [stage, setStage] = useState<'input' | 'experience'>('input');
   const [wrappedData, setWrappedData] = useState<WrappedData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const hasAutoStartedFromUrl = useRef(false);
 
   const handleUsernameSubmit = async (username: string) => {
     setIsLoading(true);
 
     try {
+      // Keep URL shareable while loading/running the experience.
+      const nextUrl = `/?username=${encodeURIComponent(username)}`;
+      window.history.replaceState(null, '', nextUrl);
+
       const response = await fetch(`/api/github/${username}`);
 
       if (!response.ok) {
@@ -36,7 +41,21 @@ export default function Home() {
   const handleExit = () => {
     setStage('input');
     setWrappedData(null);
+    window.history.replaceState(null, '', '/');
   };
+
+  // Deep-link support: visiting /?username=foo should auto-run the experience.
+  useEffect(() => {
+    if (hasAutoStartedFromUrl.current) return;
+    if (stage !== 'input') return;
+    if (isLoading) return;
+
+    const username = new URLSearchParams(window.location.search).get('username');
+    if (!username) return;
+
+    hasAutoStartedFromUrl.current = true;
+    handleUsernameSubmit(username);
+  }, [stage, isLoading]);
 
   return (
     <>
