@@ -53,13 +53,13 @@ export function RhythmSlide({ data, isActive }: SlideProps) {
             isActive={isActive}
             primary={
               <div className="py-6 md:py-10">
-                <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                <div className="text-[10px] text-diff-neutral/70 font-mono uppercase tracking-widest mb-4">
                   Peak hour
                 </div>
-                <div className="mt-4 font-mono text-7xl md:text-8xl leading-none tracking-tight text-diff-addition">
+                <div className="font-mono text-7xl md:text-9xl leading-none tracking-tighter text-diff-addition font-bold">
                   {formatHour(rhythm.peakHour)}
                 </div>
-                <div className="mt-4 font-mono text-sm text-diff-neutral">
+                <div className="mt-4 font-mono text-base md:text-lg text-diff-neutral/80">
                   Peak hour. {getTimeOfDayLabel(rhythm.peakHour)} coder.
                 </div>
               </div>

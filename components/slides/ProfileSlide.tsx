@@ -39,13 +39,13 @@ export function ProfileSlide({ data, isActive }: SlideProps) {
                 </div>
 
                 <div className="min-w-0">
-                  <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                  <div className="text-[10px] text-diff-neutral/70 font-mono uppercase tracking-widest mb-4">
                     Profile
                   </div>
-                  <div className="mt-2 font-mono text-4xl md:text-5xl leading-tight tracking-tight text-foreground">
+                  <div className="font-mono text-5xl md:text-8xl leading-none tracking-tighter text-foreground font-bold">
                     {profile.name}
                   </div>
-                  <div className="mt-2 font-mono text-sm text-diff-neutral">
+                  <div className="mt-3 font-mono text-base md:text-lg text-diff-neutral/80">
                     @{username}
                   </div>
                 </div>

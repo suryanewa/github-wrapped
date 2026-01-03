@@ -224,14 +224,12 @@
   }
   body {
     @apply bg-diff-bg text-foreground antialiased;
-    /* Subtle scanline effect for editor authenticity */
+    /* Subtle scanline effect for editor authenticity - UPDATED for "obsidian" feel */
     background-image:
-      repeating-linear-gradient(
-        0deg,
-        rgba(255, 255, 255, 0.01) 0px,
-        transparent 1px,
-        transparent 2px
-      );
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
+      radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+    background-attachment: fixed;
+    background-color: #0b0e14; /* Deep obsidian */
     font-feature-settings: 'liga' 1, 'calt' 1, 'ss01' 1;
     font-variant-numeric: tabular-nums;
   }

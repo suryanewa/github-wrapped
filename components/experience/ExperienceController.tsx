@@ -64,34 +64,30 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
   }, [nextSlide, prevSlide, onExit]);
 
   // Each slide should read like a fresh document; reset scroll on slide change.
+  // Auto-focus the container for keyboard events
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: 0 });
-  }, [currentSlide]);
+    scrollRef.current?.focus();
+  }, []);
 
   const currentFile = SLIDE_DECK[currentSlide].file || 'slide.tsx';
   const progress = ((currentSlide + 1) / totalSlides) * 100;
 
   return (
-    <div className="min-h-screen flex flex-col bg-diff-bg relative">
-      {/* Minimal editor header (quiet chrome) */}
-      <div className="sticky top-0 z-50 border-b border-diff-border/80 bg-diff-bg/80 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-3">
+    <div className="min-h-screen flex flex-col bg-diff-bg relative selection:bg-diff-highlight selection:text-white">
+      {/* Minimal editor header (quiet chrome) - Removing border for seamless feel */}
+      <div className="sticky top-0 z-50 bg-diff-bg/95 backdrop-blur-md transition-all duration-500">
+        <div className="max-w-3xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="min-w-0 font-mono text-[11px] text-diff-neutral flex items-center gap-2">
-              <span className="truncate">{data.username}</span>
-              <span className="text-diff-neutral-subtle select-none">/</span>
-              <span className="text-diff-neutral truncate">github-wrapped-{data.year}</span>
-              <span className="text-diff-neutral-subtle select-none">/</span>
-              <span className="text-foreground truncate">{currentFile}</span>
+            <div className="min-w-0 font-mono text-[10px] tracking-widest text-diff-neutral/60 uppercase flex items-center gap-3">
+              <span className="truncate hover:text-foreground transition-colors cursor-default">{data.username}</span>
+              <span className="text-diff-neutral/20 select-none">/</span>
+              <span className="text-foreground font-medium truncate">{currentFile}</span>
             </div>
 
             <div className="flex items-center gap-3 flex-shrink-0">
-              <span className="font-mono text-[11px] text-diff-neutral-subtle">
-                {currentSlide + 1}/{totalSlides}
-              </span>
               <button
                 onClick={() => setShowKeyboardHints(!showKeyboardHints)}
-                className="px-2 py-1 rounded border border-diff-border/60 text-diff-neutral hover:text-foreground hover:border-diff-border transition-colors font-mono text-[11px]"
+                className="w-6 h-6 flex items-center justify-center rounded-full border border-diff-border/40 text-diff-neutral/60 hover:text-foreground hover:border-diff-border hover:bg-diff-surface transition-all font-mono text-[10px]"
                 title="Keyboard shortcuts (?)"
               >
                 ?
@@ -99,13 +95,13 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
             </div>
           </div>
 
-          {/* Subtle progress */}
-          <div className="mt-2 h-px bg-diff-border/60">
+          {/* Subtle progress - thinner, darker */}
+          <div className="mt-3 h-[1px] bg-diff-border/20 overflow-hidden rounded-full">
             <motion.div
-              className="h-px bg-diff-neutral/50 origin-left"
+              className="h-full bg-foreground/30 origin-left"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: progress / 100 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} // Apple-style ease
             />
           </div>
         </div>
@@ -115,36 +111,37 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
       <AnimatePresence>
         {showKeyboardHints && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-diff-bg/90 backdrop-blur-sm"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(4px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
             onClick={() => setShowKeyboardHints(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-diff-surface border border-diff-border rounded-lg p-6 max-w-md"
+              initial={{ scale: 0.9, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-[#0d1117] border border-[#30363d] rounded-xl p-8 max-w-sm w-full shadow-2xl shadow-black/50"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-lg font-semibold text-foreground mb-4 font-mono">
-                Keyboard Shortcuts
+              <h3 className="text-sm font-medium text-diff-neutral mb-6 font-mono uppercase tracking-widest text-center">
+                Shortcuts
               </h3>
-              <div className="space-y-2 font-mono text-sm">
+              <div className="space-y-3 font-mono text-[13px]">
                 {[
-                  { keys: ['→', 'Space', 'j', 'l'], action: 'Next slide' },
-                  { keys: ['←', 'h', 'k'], action: 'Previous slide' },
-                  { keys: ['Esc', 'q'], action: 'Exit review' },
-                  { keys: ['?'], action: 'Toggle shortcuts' },
+                  { keys: ['→', 'Space'], action: 'Next slide' },
+                  { keys: ['←'], action: 'Previous slide' },
+                  { keys: ['Esc'], action: 'Exit' },
                 ].map((shortcut, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <span className="text-diff-neutral">{shortcut.action}</span>
-                    <div className="flex gap-1">
+                  <div key={i} className="flex items-center justify-between group">
+                    <span className="text-diff-neutral group-hover:text-foreground transition-colors">{shortcut.action}</span>
+                    <div className="flex gap-1.5">
                       {shortcut.keys.map((key, j) => (
                         <kbd
                           key={j}
-                          className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-xs text-foreground"
+                          className="min-w-[24px] h-6 px-1.5 flex items-center justify-center bg-[#161b22] border border-[#30363d] rounded text-diff-neutral-subtle group-hover:text-foreground group-hover:border-diff-neutral/50 transition-colors"
                         >
                           {key}
                         </kbd>
@@ -159,22 +156,23 @@ export function ExperienceController({ data, onExit }: ExperienceControllerProps
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <div ref={scrollRef} className="flex-1 overflow-auto">
-        <div className="max-w-5xl mx-auto px-6 py-10">
+      <div 
+        ref={scrollRef} 
+        className="flex-1 overflow-auto outline-none" 
+        tabIndex={-1} // Allow focus
+      >
+        <div className="max-w-3xl mx-auto px-6 pb-24">
           <AnimatePresence
-            mode="sync"
+            mode="wait"
             custom={direction}
           >
             <motion.div
               key={currentSlide}
               custom={direction}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{
-                duration: 0.32,
-                ease: [0.4, 0, 0.2, 1],
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
             >
               {(() => {
                 const slide = SLIDE_DECK[currentSlide];

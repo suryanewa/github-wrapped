@@ -47,13 +47,13 @@ export function SummarySlide({ data, isActive }: SlideProps) {
             isActive={isActive}
             primary={
               <div className="py-6 md:py-10">
-                <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                <div className="text-[10px] text-diff-neutral/70 font-mono uppercase tracking-widest mb-6">
                   GitHub Wrapped
                 </div>
-                <div className="mt-4 font-mono text-5xl md:text-6xl leading-tight tracking-tight text-foreground">
+                <div className="font-mono text-6xl md:text-9xl leading-none tracking-tighter text-foreground font-bold">
                   {archetype.name}.
                 </div>
-                <div className="mt-3 font-mono text-sm text-diff-neutral max-w-xl">
+                <div className="mt-6 font-mono text-lg md:text-xl text-diff-neutral/80 max-w-xl leading-relaxed">
                   +{contributions.total.toLocaleString()} contributions • {topLanguage}
                 </div>
               </div>

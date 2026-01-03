@@ -60,13 +60,13 @@ export function CollaborationSlide({ data, isActive }: SlideProps) {
             isActive={isActive}
             primary={
               <div className="py-6 md:py-10">
-                <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                <div className="text-[10px] text-diff-neutral/70 font-mono uppercase tracking-widest mb-4">
                   Work style
                 </div>
-                <div className="mt-4 font-mono text-5xl md:text-6xl leading-tight tracking-tight text-foreground">
+                <div className="font-mono text-5xl md:text-8xl leading-none tracking-tighter text-foreground font-bold">
                   {message.title}
                 </div>
-                <div className="mt-4 font-mono text-sm text-diff-neutral max-w-xl">
+                <div className="mt-4 font-mono text-base md:text-lg text-diff-neutral/80 max-w-xl">
                   {message.description}
                 </div>
               </div>

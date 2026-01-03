@@ -26,19 +26,38 @@ export function SlideDocument({
   return (
     <div className={cn("w-full max-w-3xl mx-auto", className)}>
       <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 6 }}
-        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-        className="pt-10 md:pt-14"
+        initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+        animate={{
+          opacity: isActive ? 1 : 0,
+          y: isActive ? 0 : 12,
+          filter: isActive ? "blur(0px)" : "blur(4px)",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 120,
+          damping: 20,
+          mass: 1,
+        }}
+        className="pt-10 md:pt-20"
       >
         <div className="text-left">{primary}</div>
 
         {secondary && (
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 6 }}
-            transition={{ delay: 0.45, duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className="mt-6"
+            initial={{ opacity: 0, y: 12, filter: "blur(2px)" }}
+            animate={{
+              opacity: isActive ? 1 : 0,
+              y: isActive ? 0 : 12,
+              filter: isActive ? "blur(0px)" : "blur(2px)",
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+              mass: 1,
+              delay: 0.25, // Staged beat
+            }}
+            className="mt-8"
           >
             {secondary}
           </motion.div>
@@ -46,10 +65,15 @@ export function SlideDocument({
 
         {children && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 8 }}
-            transition={{ delay: 0.7, duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className="mt-8"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 12 }}
+            transition={{
+              type: "spring",
+              stiffness: 90,
+              damping: 20,
+              delay: 0.5,
+            }}
+            className="mt-10"
           >
             {children}
           </motion.div>
@@ -57,10 +81,10 @@ export function SlideDocument({
 
         {footer && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 8 }}
-            transition={{ delay: 0.95, duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className="mt-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 1.2 }}
+            className="mt-12"
           >
             {footer}
           </motion.div>
