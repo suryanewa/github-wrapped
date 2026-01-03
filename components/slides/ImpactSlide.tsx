@@ -1,16 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FileHeader, ReviewComment, StatusBadge } from '@/components/primitives';
+import { DiffLine, FileHeader, ReviewComment, SlideDocument, StatusBadge } from '@/components/primitives';
 import { SlideProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import { Star, Trophy, Sprout } from 'lucide-react';
 
 export function ImpactSlide({ data, isActive }: SlideProps) {
   const { impact, profile } = data;
 
   const hasImpact = impact.starsEarned > 0 || impact.forksEarned > 0;
   const totalImpact = impact.starsEarned + impact.forksEarned + profile.followers;
+  const primaryLabel = hasImpact
+    ? `+${impact.starsEarned.toLocaleString()} stars`
+    : `${profile.followers.toLocaleString()} followers`;
 
   return (
     <motion.div
@@ -39,263 +40,40 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
             </div>
           </div>
 
-          {hasImpact ? (
-            <>
-              {/* Metric Cards - Glass Morphism */}
-              <div className="px-6 py-8 space-y-3">
-                {/* Stars */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{
-                    opacity: isActive ? 1 : 0,
-                    y: isActive ? 0 : 15,
-                    scale: isActive ? 1 : 0.95
-                  }}
-                  transition={{
-                    delay: 0.1,
-                    duration: 0.5,
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
-                  className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-diff-highlight/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <motion.div
-                          initial={{ scale: 0.8, rotate: -15 }}
-                          animate={{
-                            scale: isActive ? 1 : 0.8,
-                            rotate: isActive ? 0 : -15
-                          }}
-                          whileHover={{
-                            scale: 1.2,
-                            rotate: [0, -10, 10, 0],
-                            transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
-                          }}
-                          transition={{ delay: 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                          className="w-10 h-10 rounded-full bg-diff-highlight/20 flex items-center justify-center border border-diff-highlight/30 cursor-pointer"
-                        >
-                          <Star className="w-5 h-5 text-diff-highlight" fill="currentColor" strokeWidth={0} />
-                        </motion.div>
-                        <div>
-                          <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Stars Earned</div>
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: isActive ? 1 : 0 }}
-                            transition={{ delay: 0.15 }}
-                            className="text-2xl text-diff-highlight font-mono font-bold text-display"
-                          >
-                            {impact.starsEarned.toLocaleString()}
-                          </motion.div>
-                        </div>
-                      </div>
-                      <StatusBadge
-                        status={impact.starsEarned > 100 ? 'success' :
-                               impact.starsEarned > 10 ? 'warning' : 'neutral'}
-                        label={impact.starsEarned > 100 ? 'High' :
-                              impact.starsEarned > 10 ? 'Growing' : 'Early'}
-                        icon={false}
-                      />
-                    </div>
-
-                    <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive ? `${Math.min((impact.starsEarned / 1000) * 100, 100)}%` : 0 }}
-                        transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="h-full bg-diff-highlight"
-                        style={{ boxShadow: '0 0 6px var(--diff-highlight)' }}
-                      />
-                    </div>
-                    <div className="text-xs text-diff-neutral/80 font-mono mt-2">
-                      Developers who bookmarked your work
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Forks */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{
-                    opacity: isActive ? 1 : 0,
-                    y: isActive ? 0 : 15,
-                    scale: isActive ? 1 : 0.95
-                  }}
-                  transition={{
-                    delay: 0.18,
-                    duration: 0.5,
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
-                  className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-diff-addition/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-diff-addition/20 flex items-center justify-center border border-diff-addition/30">
-                          <svg className="w-5 h-5 text-diff-addition" fill="currentColor" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Forks Created</div>
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: isActive ? 1 : 0 }}
-                            transition={{ delay: 0.23 }}
-                            className="text-2xl text-diff-addition font-mono font-bold text-display group-hover:text-glow-green transition-all duration-300"
-                          >
-                            {impact.forksEarned.toLocaleString()}
-                          </motion.div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive ? `${Math.min((impact.forksEarned / 200) * 100, 100)}%` : 0 }}
-                        transition={{ delay: 0.28, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="h-full bg-diff-addition"
-                        style={{ boxShadow: '0 0 6px var(--diff-addition)' }}
-                      />
-                    </div>
-                    <div className="text-xs text-diff-neutral/80 font-mono mt-2">
-                      Developers building on your code
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Followers */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{
-                    opacity: isActive ? 1 : 0,
-                    y: isActive ? 0 : 15,
-                    scale: isActive ? 1 : 0.95
-                  }}
-                  transition={{
-                    delay: 0.26,
-                    duration: 0.5,
-                    ease: [0.16, 1, 0.3, 1]
-                  }}
-                  className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-diff-comment/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-diff-comment/20 flex items-center justify-center border border-diff-comment/30">
-                          <svg className="w-5 h-5 text-diff-comment" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M2 5.5a3.5 3.5 0 115.898 2.549 5.507 5.507 0 013.034 4.084.75.75 0 11-1.482.235 4.001 4.001 0 00-7.9 0 .75.75 0 01-1.482-.236A5.507 5.507 0 013.102 8.05 3.49 3.49 0 012 5.5zM11 4a.75.75 0 100 1.5 1.5 1.5 0 01.666 2.844.75.75 0 00-.416.672v.352a.75.75 0 00.574.73c1.2.289 2.162 1.2 2.522 2.372a.75.75 0 101.482-.236 5.507 5.507 0 00-3.034-4.084A3.002 3.002 0 0011 4z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-[10px] text-diff-neutral/80 font-mono mb-1 uppercase tracking-wider">Followers</div>
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: isActive ? 1 : 0 }}
-                            transition={{ delay: 0.31 }}
-                            className="text-2xl text-diff-comment font-mono font-bold text-display"
-                          >
-                            {profile.followers.toLocaleString()}
-                          </motion.div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="w-full bg-diff-gutter rounded-full h-2 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: isActive ? `${Math.min((profile.followers / 500) * 100, 100)}%` : 0 }}
-                        transition={{ delay: 0.36, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="h-full bg-diff-comment"
-                      />
-                    </div>
-                    <div className="text-xs text-diff-neutral/80 font-mono mt-2">
-                      Developers following your journey
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Top Project */}
+          <SlideDocument
+            isActive={isActive}
+            primary={
+              <div className="py-6 md:py-10">
+                <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                  One way your work reached others
+                </div>
+                <div className={`mt-4 font-mono text-6xl md:text-7xl leading-none tracking-tight ${hasImpact ? "text-diff-highlight" : "text-diff-comment"}`}>
+                  {primaryLabel}
+                </div>
+                <div className="mt-4 font-mono text-sm text-diff-neutral">
+                  Total reach: {totalImpact.toLocaleString()}.
+                </div>
+              </div>
+            }
+            secondary={
+              <div className="space-y-1">
+                <DiffLine type="neutral" lineNumber={1}>
+                  stars: {impact.starsEarned.toLocaleString()}
+                </DiffLine>
+                <DiffLine type="neutral" lineNumber={2}>
+                  forks: {impact.forksEarned.toLocaleString()}
+                </DiffLine>
+                <DiffLine type="neutral" lineNumber={3}>
+                  followers: {profile.followers.toLocaleString()}
+                </DiffLine>
                 {impact.topStarredRepo && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                    animate={{
-                      opacity: isActive ? 1 : 0,
-                      y: isActive ? 0 : 15,
-                      scale: isActive ? 1 : 0.95
-                    }}
-                    transition={{
-                      delay: 0.34,
-                      duration: 0.5,
-                      ease: [0.16, 1, 0.3, 1]
-                    }}
-                    className="glass-panel rounded-lg p-5 group hover-lift cursor-default relative overflow-hidden"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-diff-highlight/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-2 mb-2">
-                        <motion.div
-                          initial={{ scale: 0.8, y: 5 }}
-                          animate={{
-                            scale: isActive ? [0.8, 1.1, 1] : 0.8,
-                            y: isActive ? 0 : 5
-                          }}
-                          whileHover={{
-                            scale: [1, 1.2, 1.1],
-                            y: [0, -3, 0],
-                            transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-                          }}
-                          transition={{ delay: 0.39, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                          className="cursor-pointer"
-                        >
-                          <Trophy className="w-5 h-5 text-diff-highlight" fill="currentColor" strokeWidth={0.5} />
-                        </motion.div>
-                        <span className="text-[10px] text-diff-neutral/80 font-mono uppercase tracking-wider">Most Popular</span>
-                      </div>
-                      <div className="font-mono text-lg text-foreground font-bold text-display">
-                        {impact.topStarredRepo}
-                      </div>
-                    </div>
-                  </motion.div>
+                  <DiffLine type="neutral" lineNumber={4}>
+                    most popular: {impact.topStarredRepo}
+                  </DiffLine>
                 )}
               </div>
-            </>
-          ) : (
-            <div className="px-6 py-8">
-              <div className="text-center space-y-4">
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{
-                    scale: isActive ? 1 : 0.8,
-                    opacity: isActive ? 1 : 0
-                  }}
-                  whileHover={{
-                    scale: 1.15,
-                    rotate: [0, -5, 5, -5, 5, 0],
-                    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-                  }}
-                  transition={{ delay: 0.1, duration: 0.5 }}
-                  className="flex justify-center cursor-pointer"
-                >
-                  <Sprout className="w-12 h-12 text-diff-addition" strokeWidth={1.5} />
-                </motion.div>
-                <h3 className="font-mono text-xl text-foreground">
-                  Building Foundations
-                </h3>
-                <p className="text-diff-neutral font-mono text-sm max-w-md mx-auto">
-                  {profile.followers} developers following your journey. Every project starts somewhere.
-                </p>
-              </div>
-            </div>
-          )}
+            }
+          />
 
           {/* Review Comment */}
           <motion.div
@@ -306,14 +84,14 @@ export function ImpactSlide({ data, isActive }: SlideProps) {
           >
             <ReviewComment author="github-wrapped-bot" timestamp="just now">
               {!hasImpact
-                ? `Impact isn't always measured in stars. With ${profile.followers} followers, you're building in public and establishing your presence. Consistency compounds over time.`
+                ? `Impact isn’t only stars — you’re building in public.`
                 : impact.starsEarned > 1000
-                ? `${impact.starsEarned.toLocaleString()} stars represents exceptional community reach. Your work influences thousands of developers worldwide. ${impact.forksEarned} forks show others building on your foundation.`
+                ? `Massive reach — thousands bookmarked your work.`
                 : impact.starsEarned > 100
-                ? `Significant traction with ${impact.starsEarned} stars and ${impact.forksEarned} forks. Developers are discovering value in your work. ${profile.followers} followers track your ongoing contributions.`
+                ? `Real traction — people are finding value in what you ship.`
                 : impact.starsEarned > 10
-                ? `Growing influence: ${impact.starsEarned} stars earned, ${impact.forksEarned} forks created. Early adopters recognize quality. Continue building and sharing.`
-                : `Early momentum with ${impact.starsEarned} stars. Every star represents someone who found your work valuable. ${profile.followers} followers see potential in your trajectory.`}
+                ? `Growing influence — early adopters are showing up.`
+                : `Early momentum — a few stars is still signal.`}
             </ReviewComment>
           </motion.div>
         </div>

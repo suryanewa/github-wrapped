@@ -2,9 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { MetricBadge, StatusBadge } from '@/components/primitives';
+import { DiffLine, ReviewComment, SlideDocument } from '@/components/primitives';
 import { SlideProps } from '@/lib/types';
-import { Theater, Star } from 'lucide-react';
 
 export function SummarySlide({ data, isActive }: SlideProps) {
   const { username, year, archetype, contributions, repositories, languages, impact } = data;
@@ -12,20 +11,6 @@ export function SummarySlide({ data, isActive }: SlideProps) {
 
   const topLanguage = languages[0]?.name || 'N/A';
   const topRepo = repositories[0]?.name || 'N/A';
-
-  const rarityColors = {
-    common: 'default' as const,
-    uncommon: 'highlight' as const,
-    rare: 'addition' as const,
-    legendary: 'deletion' as const,
-  };
-
-  const rarityLabels = {
-    common: 'Common',
-    uncommon: 'Uncommon',
-    rare: 'Rare',
-    legendary: 'Legendary',
-  };
 
   const handleCopyLink = () => {
     const url = `${window.location.origin}?username=${username}`;
@@ -45,131 +30,66 @@ export function SummarySlide({ data, isActive }: SlideProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: isActive ? 1 : 0 }}
-      className="w-full min-h-[600px] flex items-center justify-center"
+      className="w-full"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.95 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="w-full max-w-2xl"
+        className="w-full"
       >
-        {/* PR Summary Card - Premium Glass Morphism */}
-        <div id="summary-card" className="glass-panel border-2 border-diff-addition rounded-xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
-          {/* Subtle shimmer effect */}
-          <div className="absolute inset-0 animate-shimmer opacity-30" />
-          {/* PR Header */}
-          <div className="relative z-10 flex items-start gap-3 mb-6 pb-6 border-b border-diff-neutral/30">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-diff-addition flex items-center justify-center">
-              <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-1">
-                Pull Request: GitHub Wrapped 2025
-              </h2>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-diff-neutral font-mono text-sm">@{username}</span>
-                <MetricBadge
-                  label="Status"
-                  value="Approved"
-                  variant="addition"
-                />
+        <div id="summary-card" className="bg-diff-surface border border-diff-border rounded-lg">
+          <div className="px-6 py-3 bg-diff-bg border-b border-diff-border font-mono text-xs text-diff-neutral">
+            @@ year-review-summary.md @@
+          </div>
+
+          <SlideDocument
+            isActive={isActive}
+            primary={
+              <div className="py-6 md:py-10">
+                <div className="text-[11px] text-diff-neutral/70 font-mono uppercase tracking-[0.22em]">
+                  Year summary
+                </div>
+                <div className="mt-4 font-mono text-4xl md:text-5xl leading-tight tracking-tight text-foreground">
+                  {archetype.name}.
+                </div>
+                <div className="mt-3 font-mono text-sm text-diff-neutral max-w-xl">
+                  +{contributions.total.toLocaleString()} contributions. Primary: {topLanguage}.
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Archetype */}
-          <div className="relative z-10 mb-6 pb-6 border-b border-diff-neutral/30">
-            <div className="flex items-center gap-3 mb-2">
-              <motion.div
-                initial={{ scale: 0.8, rotate: -10 }}
-                animate={{
-                  scale: isActive ? 1 : 0.8,
-                  rotate: isActive ? 0 : -10
-                }}
-                whileHover={{
-                  scale: 1.2,
-                  rotate: [0, -8, 8, -8, 8, 0],
-                  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
-                }}
-                transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="cursor-pointer"
-              >
-                <Theater className="w-6 h-6 text-diff-comment" strokeWidth={2} />
-              </motion.div>
-              <h3 className="font-serif text-xl text-foreground">
-                {archetype.name}
-              </h3>
-            </div>
-            <div className="flex items-center gap-3 mb-2">
-              <MetricBadge
-                label="Rarity"
-                value={rarityLabels[archetype.rarity]}
-                variant={rarityColors[archetype.rarity]}
-              />
-            </div>
-            <p className="text-diff-neutral italic">
-              "{archetype.description}"
-            </p>
-          </div>
-
-          {/* Key Stats */}
-          <div className="relative z-10 space-y-3 mb-6">
-            <div className="flex items-center justify-between">
-              <span className="text-diff-neutral font-mono text-sm">Total Contributions</span>
-              <span className="text-diff-addition font-mono font-bold text-lg">
-                +{contributions.total.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-diff-neutral font-mono text-sm">Repositories Active</span>
-              <span className="text-foreground font-mono font-bold text-lg">
-                {repositories.length}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-diff-neutral font-mono text-sm">Top Repository</span>
-              <span className="text-foreground font-mono font-bold text-sm">
-                {topRepo}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-diff-neutral font-mono text-sm">Primary Language</span>
-              <span className="text-diff-comment font-mono font-bold text-sm">
-                {topLanguage}
-              </span>
-            </div>
-            {impact.starsEarned > 0 && (
-              <div className="flex items-center justify-between">
-                <span className="text-diff-neutral font-mono text-sm">Stars Earned</span>
-                <span className="text-diff-highlight font-mono font-bold text-lg flex items-center gap-2 group/star">
-                  <motion.div
-                    whileHover={{
-                      scale: 1.3,
-                      rotate: [0, -15, 15, 0],
-                      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <Star className="w-4 h-4" fill="currentColor" strokeWidth={0} />
-                  </motion.div>
-                  {impact.starsEarned.toLocaleString()}
-                </span>
+            }
+            secondary={
+              <div className="space-y-1">
+                <DiffLine type="neutral" lineNumber={1}>
+                  user: @{username}
+                </DiffLine>
+                <DiffLine type="addition" lineNumber={2}>
+                  + {contributions.total.toLocaleString()} contributions
+                </DiffLine>
+                <DiffLine type="neutral" lineNumber={3}>
+                  repos touched: {repositories.length}
+                </DiffLine>
+                <DiffLine type="neutral" lineNumber={4}>
+                  top repo: {topRepo}
+                </DiffLine>
+                <DiffLine type="neutral" lineNumber={5}>
+                  primary language: {topLanguage}
+                </DiffLine>
+                {impact.starsEarned > 0 && (
+                  <DiffLine type="neutral" lineNumber={6}>
+                    stars earned: {impact.starsEarned.toLocaleString()}
+                  </DiffLine>
+                )}
               </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="relative z-10 pt-6 border-t border-diff-neutral/30 flex items-center justify-between">
-            <div className="text-xs text-diff-neutral font-mono">
-              github-wrapped.dev
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-diff-addition"></div>
-              <span className="text-sm text-diff-addition font-mono">Review Complete</span>
-            </div>
-          </div>
+            }
+            footer={
+              <div className="pt-2">
+                <ReviewComment author="github-wrapped-bot" timestamp={`${year}`}>
+                  {archetype.description}
+                </ReviewComment>
+              </div>
+            }
+          />
         </div>
 
         {/* Share Actions */}
@@ -185,7 +105,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleCopyLink}
-              className="flex items-center gap-2 px-4 py-2 bg-diff-comment hover:bg-diff-comment/80 text-black font-mono text-sm font-semibold rounded transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-diff-surface hover:bg-diff-surface-hover text-foreground border border-diff-border font-mono text-sm rounded transition-colors"
             >
               {copied ? (
                 <>
@@ -209,7 +129,7 @@ export function SummarySlide({ data, isActive }: SlideProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleShareTwitter}
-              className="flex items-center gap-2 px-4 py-2 bg-diff-addition hover:bg-diff-addition/80 text-black font-mono text-sm font-semibold rounded transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-diff-surface hover:bg-diff-surface-hover text-foreground border border-diff-border font-mono text-sm rounded transition-colors"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -222,11 +142,11 @@ export function SummarySlide({ data, isActive }: SlideProps) {
           <div className="text-center space-y-2">
             <div className="flex items-center justify-center gap-4 text-diff-neutral font-mono text-xs">
               <span>
-                Press <kbd className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-diff-highlight">Esc</kbd> to create another
+                Press <kbd className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-diff-neutral">Esc</kbd> to create another
               </span>
               <span className="text-diff-neutral/50">•</span>
               <span>
-                <kbd className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-diff-highlight">?</kbd> for shortcuts
+                <kbd className="px-2 py-1 bg-diff-gutter border border-diff-border rounded text-diff-neutral">?</kbd> for shortcuts
               </span>
             </div>
             <p className="text-diff-neutral/50 font-mono text-xs">

@@ -4,3 +4,4 @@ export { ReviewComment } from './ReviewComment';
 export { MetricBadge } from './MetricBadge';
 export { StatusBadge } from './StatusBadge';
 export { ContributionHeatmap } from './ContributionHeatmap';
+export { SlideDocument } from './SlideDocument';
